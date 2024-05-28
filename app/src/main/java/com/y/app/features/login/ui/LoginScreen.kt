@@ -1,4 +1,4 @@
-package com.y.app.features.login
+package com.y.app.features.login.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button

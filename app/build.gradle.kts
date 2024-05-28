@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.koin.androidx.compose)
     implementation(libs.gson)
+    implementation(libs.androidx.material.icons.extended)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.kotlinx.coroutines.core)

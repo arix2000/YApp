@@ -1,4 +1,4 @@
-package com.y.app.features.login
+package com.y.app.features.login.ui
 
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable

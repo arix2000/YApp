@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Y</string>
+    <string name="no_internet_connection">No Internet Connection</string>
 </resources>

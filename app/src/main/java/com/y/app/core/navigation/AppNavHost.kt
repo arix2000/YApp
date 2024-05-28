@@ -8,8 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.y.app.features.home.HomeScreen
-import com.y.app.features.login.LoginScreen
-import com.y.app.features.login.RegistrationScreen
+import com.y.app.features.login.ui.LoginScreen
+import com.y.app.features.login.ui.RegistrationScreen
 import com.y.app.features.post.PostDetailsScreen
 import org.koin.compose.koinInject
 
