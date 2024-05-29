@@ -15,15 +15,28 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     private var loginJob: Job? = null
 
-    fun login(email: String, password: String) {
+    fun invokeEvent(event: LoginEvent) {
+        when(event) {
+            is LoginEvent.LoginUser -> login(event.email, event.password)
+            LoginEvent.ClearErrorMessage -> clearErrorMessage()
+        }
+    }
+
+    private fun clearErrorMessage() {
+        _state.update {
+            it.copy(errorMessage = null)
+        }
+    }
+
+    private fun login(email: String, password: String) {
         loginJob?.cancel()
         loginJob = viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             loginRepository.loginUser(email, password)
                 .collect(onSuccess = { user ->
-                    _state.update { it.copy(user = user) }
+                    _state.update { it.copy(user = user, isLoading = false) }
                 }, onError = { message ->
-                    _state.update { it.copy(errorMessage = message) }
+                    _state.update { it.copy(errorMessage = message, isLoading = false) }
                 })
 
         }

@@ -10,9 +10,11 @@ import java.security.MessageDigest
 class LoginRepository(val apiService: ApiService) : BaseRepository() {
 
     suspend fun loginUser(email: String, password: String): ApiResponse<User> {
-        //return makeHttpRequest {  apiService.login(Credentials(email, hashPassword(password))) }
+        //return makeHttpRequest { apiService.login(Credentials(email, hashPassword(password))) }
         delay(2000)
-        return ApiResponse.Success(User(1, "ADAM", "STANCZYK", email, "#00FF00"))
+        return if (email == "admin" && password == "administrator")
+            ApiResponse.Success(User(1, "ADAM", "STANCZYK", email, "#00FF00"))
+        else ApiResponse.Error("Wrong Password")
     }
 
     fun hashPassword(password: String): String {

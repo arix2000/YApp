@@ -13,6 +13,12 @@ class Navigator {
         navController.navigate(screen.route)
     }
 
+    fun navigateToAndClearBackStack(screen: Screen) {
+        navController.navigate(screen.route) {
+            popUpTo(Screen.LoginScreen.route) { inclusive = true }
+        }
+    }
+
     fun popBackStack() {
         navController.popBackStack()
     }
