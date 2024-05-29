@@ -39,8 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -77,8 +76,6 @@ private fun LoginScreenContent(
 ) {
     var emailText by remember { mutableStateOf("") }
     var passText by remember { mutableStateOf("") }
-
-    val passwordFocus = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
     DisposableEffect(state.user) {
@@ -127,7 +124,7 @@ private fun LoginScreenContent(
                 ),
                 keyboardActions = KeyboardActions(
                     onNext = {
-                        passwordFocus.requestFocus()
+                        focusManager.moveFocus(FocusDirection.Down)
                     }
                 ),
             )
@@ -138,7 +135,7 @@ private fun LoginScreenContent(
                     invokeEvent(LoginEvent.ClearErrorMessage)
                 },
                 label = { Text(text = stringResource(R.string.password_label)) },
-                modifier = Modifier.fillMaxWidth().focusRequester(passwordFocus),
+                modifier = Modifier.fillMaxWidth(),
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardActions = KeyboardActions(onDone = {
                     focusManager.clearFocus()
