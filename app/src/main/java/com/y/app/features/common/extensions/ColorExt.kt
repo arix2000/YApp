@@ -4,5 +4,5 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 
 fun Color.isDark(): Boolean {
-    return this.luminance() < 0.5
+    return this.luminance() < 0.4
 }

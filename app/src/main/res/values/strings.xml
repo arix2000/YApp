@@ -7,4 +7,12 @@
     <string name="login_screen_error_message">Invalid password or email!</string>
     <string name="no_acount_button">Don\'t have an account?</string>
     <string name="sign_in_button_text">Sign in</string>
+    <string name="validate_not_empty_message">This field can\'t be empty</string>
+    <string name="first_name_label">First name</string>
+    <string name="last_name_label">Last name</string>
+    <string name="validate_email_message">It\'s not an email</string>
+    <string name="validate_password_message">Passwords are not the same!</string>
+    <string name="sign_up">Sign up</string>
+    <string name="registration_title">Sign up to Y:</string>
+    <string name="personalise_avatar_section_title">Personalise your avatar:</string>
 </resources>
