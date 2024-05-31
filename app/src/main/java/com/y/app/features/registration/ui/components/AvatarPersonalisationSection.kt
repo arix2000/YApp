@@ -20,14 +20,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.y.app.R
 import com.y.app.core.theme.YTheme
-import com.y.app.features.common.BackgroundAwareText
+import com.y.app.features.common.Avatar
 import com.y.app.features.registration.data.ProfileColorEnum
 import com.y.app.features.registration.data.UserBodyUi
 import com.y.app.features.registration.ui.RegistrationEvent
@@ -46,7 +45,12 @@ fun AvatarPersonalisationSection(
             fontSize = 20.sp,
             modifier = Modifier.align(Alignment.Start)
         )
-        Avatar(user.firstName, user.avatarColor)
+        Avatar(
+            user.firstName,
+            user.avatarColor,
+            avatarSize = 100.dp,
+            fontSize = 40.sp,
+        )
         ColorsRotator(selectedColor = user.avatarColor,
             colors = ProfileColorEnum.entries.filter { it.name.contains(ProfileColorEnum.DARK_KEY) },
             onColorPicked = { color ->
@@ -58,26 +62,6 @@ fun AvatarPersonalisationSection(
                 invokeEvent(RegistrationEvent.UpdateUser(user.copy(avatarColor = color)))
             })
 
-    }
-}
-
-@Composable
-fun Avatar(firstName: String, avatarColor: ProfileColorEnum) {
-    Box(
-        contentAlignment = Alignment.Center, modifier = Modifier
-            .border(
-                width = 3.dp,
-                color = lerp(avatarColor.color, MaterialTheme.colorScheme.background, 0.3f),
-                shape = CircleShape
-            )
-            .background(color = avatarColor.color, shape = CircleShape)
-            .size(100.dp)
-    ) {
-        BackgroundAwareText(
-            text = firstName.firstOrNull()?.toString()?.uppercase() ?: "X",
-            backgroundColor = avatarColor.color,
-            fontSize = 40.sp,
-        )
     }
 }
 

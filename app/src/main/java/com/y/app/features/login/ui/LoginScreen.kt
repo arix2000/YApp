@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,6 +56,9 @@ import org.koin.compose.koinInject
 @Composable
 fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), navigator: Navigator = koinInject()) {
     val state = viewModel.state.collectAsState().value
+    LaunchedEffect(true) {
+        viewModel.invokeEvent(LoginEvent.LoginSavedUser)
+    }
     LoginScreenContent(
         state = state,
         navigator = navigator,
@@ -78,8 +81,7 @@ private fun LoginScreenContent(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
+            .fillMaxSize()
             .padding(16.dp)
             .imePadding()
             .verticalScroll(rememberScrollState()),
@@ -142,7 +144,9 @@ private fun LoginScreenContent(
                 onClick = {
                     invokeEvent(LoginEvent.LoginUser(emailText, passText))
                 },
-                modifier = Modifier.align(Alignment.End).width(126.dp)
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .width(126.dp)
             )
         }
     }

@@ -65,7 +65,7 @@ fun RegistrationScreen(
         if (state.registrationResult == RegistrationResult.OK) {
             Toast.makeText(
                 context,
-                "Successfully registered, now you can sign in",
+                context.getString(R.string.register_success_toast_message),
                 Toast.LENGTH_LONG
             ).show()
             navigator.navigateToAndClearBackStack(Screen.LoginScreen)

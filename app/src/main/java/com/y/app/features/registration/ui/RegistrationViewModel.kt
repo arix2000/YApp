@@ -2,7 +2,7 @@ package com.y.app.features.registration.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.y.app.features.login.data.LoginRepository
+import com.y.app.features.login.data.UserRepository
 import com.y.app.features.login.data.models.RegistrationResult
 import com.y.app.features.registration.data.UserBodyUi
 import kotlinx.coroutines.Job
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class RegistrationViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class RegistrationViewModel(private val userRepository: UserRepository) : ViewModel() {
     private val _state: MutableStateFlow<RegistrationState> = MutableStateFlow(RegistrationState())
     val state get() = _state.asStateFlow()
 
@@ -35,7 +35,7 @@ class RegistrationViewModel(private val loginRepository: LoginRepository) : View
         registerJob?.cancel()
         registerJob = viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            loginRepository.registerUser(userBodyUiState.value.toUserBody()).collect(
+            userRepository.registerUser(userBodyUiState.value.toUserBody()).collect(
                 onSuccess = { response ->
                     _state.update {
                         it.copy(

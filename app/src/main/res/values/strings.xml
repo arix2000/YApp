@@ -15,4 +15,5 @@
     <string name="sign_up">Sign up</string>
     <string name="registration_title">Sign up to Y:</string>
     <string name="personalise_avatar_section_title">Personalise your avatar:</string>
+    <string name="register_success_toast_message">Successfully registered, now you can sign in</string>
 </resources>
