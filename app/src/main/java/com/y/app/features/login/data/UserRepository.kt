@@ -1,9 +1,12 @@
 package com.y.app.features.login.data
 
+import com.y.app.author1
 import com.y.app.core.local.DataStoreManager
 import com.y.app.core.network.ApiResponse
 import com.y.app.core.network.ApiService
 import com.y.app.core.network.BaseRepository
+import com.y.app.features.home.data.models.Post
+import com.y.app.features.home.data.models.PostFilterEnum
 import com.y.app.features.login.data.models.RegistrationResponse
 import com.y.app.features.login.data.models.RegistrationResult
 import com.y.app.features.login.data.models.User
@@ -12,7 +15,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import java.security.MessageDigest
 
-class UserRepository(val apiService: ApiService, val dataStore: DataStoreManager) : BaseRepository() {
+class UserRepository(private val apiService: ApiService, private val dataStore: DataStoreManager) :
+    BaseRepository() {
 
     suspend fun loginUser(email: String, password: String): ApiResponse<User> {
         /*val response = makeHttpRequest { apiService.login(Credentials(email, hashPassword(password))) }
@@ -21,7 +25,7 @@ class UserRepository(val apiService: ApiService, val dataStore: DataStoreManager
         return response*/
         delay(2000)
         val response = if (email == "admin")
-            ApiResponse.Success(User(1, "ADAM", "STANCZYK", email, "#00FF00"))
+            ApiResponse.Success(author1)
         else ApiResponse.Error("Wrong Password")
         if (response.isSuccess())
             saveUser(response.data!!)
@@ -46,6 +50,10 @@ class UserRepository(val apiService: ApiService, val dataStore: DataStoreManager
         }
     }
 
+    suspend fun getUserPosts(userId: Int, filter: PostFilterEnum): ApiResponse<List<Post>> {
+        return makeHttpRequest { apiService.getUserPosts(userId, filter.key) }
+    }
+
     suspend fun getUser(userId: Int): ApiResponse<User> {
         //return makeHttpRequest { apiService.getUser(userId) }
         delay(2000)
@@ -56,8 +64,7 @@ class UserRepository(val apiService: ApiService, val dataStore: DataStoreManager
         dataStore.saveUser(user)
     }
 
-    suspend fun getUser(): Flow<User?> {
+    fun getUser(): Flow<User?> {
         return dataStore.user
     }
-
 }

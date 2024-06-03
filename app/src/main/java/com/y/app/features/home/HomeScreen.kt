@@ -1,20 +1,49 @@
 package com.y.app.features.home
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.y.app.author1
 import com.y.app.core.navigation.Navigator
 import com.y.app.core.theme.YTheme
+import com.y.app.features.common.AppTopBar
+import com.y.app.features.common.DefaultLoadingScreen
+import com.y.app.features.common.ErrorBanner
+import com.y.app.features.home.data.models.Post
+import com.y.app.features.home.data.ui.HomeEvent
+import com.y.app.features.home.data.ui.HomeViewModel
+import com.y.app.features.login.data.models.User
+import com.y.app.posts
+import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @Composable
-fun HomeScreen(navigator: Navigator = koinInject()) {
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text(text = "HomeScreen")
+fun HomeScreen(navigator: Navigator = koinInject(), viewModel: HomeViewModel = koinViewModel()) {
+    val state = viewModel.state.collectAsState().value
+    if (state.isLoading) {
+        DefaultLoadingScreen()
+    } else if (state.posts != null && state.user != null) {
+        HomeScreenContent(
+            state.user,
+            state.posts,
+            { event: HomeEvent -> viewModel.invokeEvent(event) }, navigator
+        )
+    }
+
+    ErrorBanner(errorMessage = state.errorMessage)
+}
+
+@Composable
+fun HomeScreenContent(
+    user: User,
+    posts: List<Post>,
+    invokeEvent: (HomeEvent) -> Unit,
+    navigator: Navigator
+) {
+    Column {
+        AppTopBar(navigator)
     }
 }
 
@@ -23,7 +52,7 @@ fun HomeScreen(navigator: Navigator = koinInject()) {
 private fun HomeScreenPreview() {
     YTheme {
         Surface {
-            HomeScreen()
+            HomeScreenContent(author1, posts, { }, Navigator())
         }
     }
 }

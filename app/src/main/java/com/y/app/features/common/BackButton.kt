@@ -12,19 +12,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BackButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun BackButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    transparentBackground: Boolean = false,
+) {
     Box(modifier = modifier
         .clip(CircleShape)
         .clickable { onClick() }
-        .background(MaterialTheme.colorScheme.primary)
+        .background(if (transparentBackground) Color.Transparent else MaterialTheme.colorScheme.primary)
         .padding(12.dp)) {
         Icon(
             imageVector = Icons.AutoMirrored.Default.ArrowBack,
             contentDescription = "Back",
-            tint = MaterialTheme.colorScheme.background
+            tint = if(transparentBackground) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.background
         )
     }
 }
