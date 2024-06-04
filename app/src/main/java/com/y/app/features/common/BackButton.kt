@@ -29,7 +29,9 @@ fun BackButton(
         Icon(
             imageVector = Icons.AutoMirrored.Default.ArrowBack,
             contentDescription = "Back",
-            tint = if(transparentBackground) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.background
+            tint = if (transparentBackground)
+                MaterialTheme.colorScheme.onBackground
+            else MaterialTheme.colorScheme.background
         )
     }
 }

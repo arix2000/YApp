@@ -20,9 +20,9 @@ import com.y.app.core.theme.YTheme
 import com.y.app.features.registration.data.ProfileColorEnum
 
 @Composable
-fun Avatar(firstName: String, avatarColor: ProfileColorEnum, avatarSize: Dp, fontSize: TextUnit) {
+fun Avatar(firstName: String, avatarColor: ProfileColorEnum, avatarSize: Dp, fontSize: TextUnit, modifier: Modifier = Modifier) {
     Box(
-        contentAlignment = Alignment.Center, modifier = Modifier
+        contentAlignment = Alignment.Center, modifier = modifier
             .border(
                 width = 3.dp,
                 color = lerp(avatarColor.color, MaterialTheme.colorScheme.background, 0.3f),

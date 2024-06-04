@@ -31,12 +31,12 @@ val posts = listOf(
     Post(
         id = 101,
         author = author1,
-        content = "Excited about the new project launch! 🚀 #innovation",
+        content = "Vivamus quis pulvinar leo. Mauris sed turpis nisi. Pellentesque purus augue, dignissim vitae elit a, elementum tristique quam. Duis nec semper neque. Aenean sed lacus cursus, tempus massa non, fringilla metus. Morbi porttitor metus mauris, at placerat massa maximus ut. Morbi sit amet ultrices neque. Fusce ultrices justo eros, sed molestie sapien pharetra non. Duis nibh nunc orci.",
         likesCount = 42,
         commentsCount = 5,
         isLikedByMe = true,
         imageUrl = "https://example.com/image1.jpg",
-        date = "2024-05-27T14:00:00Z"
+        date = "2024-06-04T16:39:00"
     ),
     Post(
         id = 102,
@@ -46,7 +46,7 @@ val posts = listOf(
         commentsCount = 3,
         isLikedByMe = false,
         imageUrl = "https://example.com/image2.jpg",
-        date = "2024-05-28T14:00:00Z"
+        date = "2024-06-04T12:10:00"
     ),
     Post(
         id = 103,
@@ -56,7 +56,7 @@ val posts = listOf(
         commentsCount = 10,
         isLikedByMe = true,
         imageUrl = "https://example.com/image3.jpg",
-        date = "2024-05-29T14:00:00Z"
+        date = "2024-06-04T01:01:00"
     ),
     Post(
         id = 104,
@@ -66,7 +66,7 @@ val posts = listOf(
         commentsCount = 1,
         isLikedByMe = false,
         imageUrl = "https://example.com/image4.jpg",
-        date = "2024-05-30T14:00:00Z"
+        date = "2024-05-30T14:00:00"
     ),
     Post(
         id = 105,
@@ -76,7 +76,7 @@ val posts = listOf(
         commentsCount = 15,
         isLikedByMe = true,
         imageUrl = "https://example.com/image5.jpg",
-        date = "2024-06-01T14:00:00Z"
+        date = "2024-06-01T14:00:00"
     ),
     Post(
         id = 106,
@@ -86,7 +86,7 @@ val posts = listOf(
         commentsCount = 2,
         isLikedByMe = false,
         imageUrl = "https://example.com/image6.jpg",
-        date = "2024-06-02T14:00:00Z"
+        date = "2024-06-02T14:00:00"
     ),
     Post(
         id = 107,
@@ -96,7 +96,7 @@ val posts = listOf(
         commentsCount = 20,
         isLikedByMe = true,
         imageUrl = "https://example.com/image7.jpg",
-        date = "2024-06-03T14:00:00Z"
+        date = "2024-06-03T14:00:00"
     ),
     Post(
         id = 108,
@@ -106,7 +106,7 @@ val posts = listOf(
         commentsCount = 7,
         isLikedByMe = false,
         imageUrl = "https://example.com/image8.jpg",
-        date = "2024-06-04T14:00:00Z"
+        date = "2024-06-04T14:00:00"
     ),
     Post(
         id = 109,
@@ -116,7 +116,7 @@ val posts = listOf(
         commentsCount = 8,
         isLikedByMe = true,
         imageUrl = "https://example.com/image9.jpg",
-        date = "2024-06-05T14:00:00Z"
+        date = "2024-06-05T14:00:00"
     ),
     Post(
         id = 110,
@@ -126,7 +126,7 @@ val posts = listOf(
         commentsCount = 9,
         isLikedByMe = false,
         imageUrl = "https://example.com/image10.jpg",
-        date = "2024-06-06T14:00:00Z"
+        date = "2024-06-06T14:00:00"
     )
 )
 
@@ -139,7 +139,7 @@ val oneUserPosts = listOf(
         commentsCount = 5,
         isLikedByMe = true,
         imageUrl = "https://example.com/image1.jpg",
-        date = "2024-05-27T14:00:00Z"
+        date = "2024-05-27T14:00:00"
     ),
     Post(
         id = 102,
@@ -149,7 +149,7 @@ val oneUserPosts = listOf(
         commentsCount = 3,
         isLikedByMe = false,
         imageUrl = "https://example.com/image2.jpg",
-        date = "2024-05-28T14:00:00Z"
+        date = "2024-05-28T14:00:00"
     ),
     Post(
         id = 103,
@@ -159,7 +159,7 @@ val oneUserPosts = listOf(
         commentsCount = 10,
         isLikedByMe = true,
         imageUrl = "https://example.com/image3.jpg",
-        date = "2024-05-29T14:00:00Z"
+        date = "2024-05-29T14:00:00"
     ),
     Post(
         id = 104,
@@ -169,7 +169,7 @@ val oneUserPosts = listOf(
         commentsCount = 1,
         isLikedByMe = false,
         imageUrl = "https://example.com/image4.jpg",
-        date = "2024-05-30T14:00:00Z"
+        date = "2024-05-30T14:00:00"
     ),
     Post(
         id = 105,
@@ -179,6 +179,6 @@ val oneUserPosts = listOf(
         commentsCount = 15,
         isLikedByMe = true,
         imageUrl = "https://example.com/image5.jpg",
-        date = "2024-06-01T14:00:00Z"
+        date = "2024-06-01T14:00:00"
     )
 )

@@ -1,22 +1,21 @@
-package com.y.app.features.post
+package com.y.app.features.home
 
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.y.app.core.theme.YTheme
 
 @Composable
-fun PostDetailsScreen(postId: String) {
-    Text(text = postId)
+fun AddPostScreen() {
+
 }
 
 @Preview
 @Composable
-private fun PostDetailsScreenPreview() {
+private fun AddPostScreenPreview() {
     YTheme {
         Surface {
-
+            AddPostScreen()
         }
     }
 }

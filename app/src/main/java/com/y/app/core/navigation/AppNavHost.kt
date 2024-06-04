@@ -7,10 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.y.app.features.home.AddPostScreen
 import com.y.app.features.home.HomeScreen
 import com.y.app.features.login.ui.LoginScreen
-import com.y.app.features.registration.RegistrationScreen
 import com.y.app.features.post.PostDetailsScreen
+import com.y.app.features.profile.ProfileScreen
+import com.y.app.features.registration.RegistrationScreen
 import org.koin.compose.koinInject
 
 @Composable
@@ -33,8 +35,19 @@ fun AppNavHost() {
         composable(Screen.RegistrationScreen.route) {
             RegistrationScreen()
         }
-        composable(Screen.PostDetailsScreen.route) {
-            PostDetailsScreen()
+        composable(Screen.PostDetailsScreen.route) { backStack ->
+            backStack.arguments?.getString(Screen.PostDetailsScreen.argName)?.let {
+                PostDetailsScreen(it)
+            }
+        }
+        composable(Screen.ProfileScreen.route) { backStack ->
+            backStack.arguments?.getString(Screen.ProfileScreen.argName)?.let {
+                ProfileScreen(it)
+            }
+        }
+
+        composable(Screen.AddPostScreen.route) {
+            AddPostScreen()
         }
     }
 }

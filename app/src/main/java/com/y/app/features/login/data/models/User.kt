@@ -10,6 +10,9 @@ data class User(
     val avatarColor: String,
 ) {
 
+    val fullName get() = "$name $lastName"
+
+
     fun toJson(): String {
         val gson = Gson()
         return gson.toJson(this)
