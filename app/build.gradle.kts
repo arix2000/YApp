@@ -71,6 +71,7 @@ dependencies {
     implementation(libs.accompanist.swiperefresh)
     implementation(libs.androidx.material)
     implementation(libs.coil.compose)
+    implementation (libs.logging.interceptor)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
