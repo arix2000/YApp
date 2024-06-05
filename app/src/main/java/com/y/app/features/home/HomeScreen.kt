@@ -18,12 +18,11 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +39,7 @@ import com.y.app.features.home.data.models.PostFilterEnum
 import com.y.app.features.home.ui.HomeEvent
 import com.y.app.features.home.ui.HomeState
 import com.y.app.features.home.ui.HomeViewModel
+import com.y.app.features.home.ui.components.EmptyHomeScreen
 import com.y.app.features.home.ui.components.PostItem
 import com.y.app.features.login.data.models.User
 import com.y.app.posts
@@ -51,12 +51,17 @@ fun HomeScreen(navigator: Navigator = koinInject(), viewModel: HomeViewModel = k
     val state = viewModel.state.collectAsState().value
     if (state.isLoading) {
         DefaultLoadingScreen()
-    } else if (state.posts != null && state.user != null) {
+    } else if (!state.posts.isNullOrEmpty() && state.user != null) {
         HomeScreenContent(
             state, { event: HomeEvent -> viewModel.invokeEvent(event) }, navigator
         )
+    } else if (state.posts?.isEmpty() == true && state.user != null) {
+        Column {
+            HomeTopBar(navigator = navigator, user = state.user)
+            EmptyHomeScreen()
+        }
     }
-
+    HomeFloatingActionButton(navigator)
     ErrorBanner(errorMessage = state.errorMessage)
 }
 
@@ -70,11 +75,12 @@ fun HomeScreenContent(
     val pullRefreshState = rememberPullRefreshState(refreshing = state.isRefreshing, onRefresh = {
         invokeEvent(HomeEvent.RefreshPosts(PostFilterEnum.NEW))
     })
-    var posts = remember { mutableStateListOf<Post>() }
-    DisposableEffect(inputPosts) {
-        posts = inputPosts.toMutableStateList()
-        onDispose { }
+    val posts = remember { mutableStateListOf(*inputPosts.toTypedArray()) }
+    LaunchedEffect(inputPosts) {
+        posts.clear()
+        posts.addAll(inputPosts)
     }
+
     Column(modifier = Modifier.fillMaxSize()) {
         HomeTopBar(navigator, user)
         Spacer(modifier = Modifier.height(8.dp))
@@ -97,6 +103,10 @@ fun HomeScreenContent(
             )
         }
     }
+}
+
+@Composable
+private fun HomeFloatingActionButton(navigator: Navigator) {
     Box(
         contentAlignment = Alignment.BottomEnd, modifier = Modifier
             .fillMaxSize()
@@ -127,7 +137,7 @@ private fun HomeScreenPreview() {
     YTheme {
         Surface {
             HomeScreenContent(
-                HomeState(isRefreshing = false, posts = posts, user = author1), { }, Navigator()
+                HomeState(posts = posts, user = author1), { }, Navigator()
             )
         }
     }

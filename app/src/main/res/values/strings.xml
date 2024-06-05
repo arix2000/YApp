@@ -18,4 +18,5 @@
     <string name="register_success_toast_message">Successfully registered, now you can sign in</string>
     <string name="post_hours_ago_text">%1$d hours ago</string>
     <string name="post_minutes_ago_text">%1$d minutes ago</string>
+    <string name="empty_home_text">There are no posts yet, click the ‘+’ button in the bottom right corner to change that!</string>
 </resources>
