@@ -22,9 +22,9 @@ class Navigator {
         }
     }
 
-    fun navigateToAndClearBackStack(screen: Screen) {
+    fun navigateToAndClearBackStack(screen: Screen, currentScreen: Screen) {
         navController.navigate(screen.route) {
-            popUpTo(Screen.LoginScreen.route) { inclusive = true }
+            popUpTo(currentScreen.route) { inclusive = true }
         }
     }
 

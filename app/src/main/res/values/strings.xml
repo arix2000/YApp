@@ -19,4 +19,11 @@
     <string name="post_hours_ago_text">%1$d hours ago</string>
     <string name="post_minutes_ago_text">%1$d minutes ago</string>
     <string name="empty_home_text">There are no posts yet, click the ‘+’ button in the bottom right corner to change that!</string>
+    <string name="content_cannot_be_empty">Content cannot be empty!</string>
+    <string name="reached_char_limit">The character limit has been reached</string>
+    <string name="sup">What\'s up?</string>
+    <string name="image_url_hint">Insert your image url (Optional)</string>
+    <string name="invalid_url">This is invalid url</string>
+    <string name="preview_image">Preview Image</string>
+    <string name="preview">Preview</string>
 </resources>

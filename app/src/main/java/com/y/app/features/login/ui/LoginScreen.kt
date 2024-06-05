@@ -46,6 +46,7 @@ import com.y.app.R
 import com.y.app.core.navigation.Navigator
 import com.y.app.core.navigation.Screen
 import com.y.app.core.theme.YTheme
+import com.y.app.features.common.NextButton
 import com.y.app.features.common.YOutlinedTextField
 import com.y.app.features.login.ui.state.LoginEvent
 import com.y.app.features.login.ui.state.LoginState
@@ -75,7 +76,7 @@ private fun LoginScreenContent(
 
     DisposableEffect(state.user) {
         if (state.user != null)
-            navigator.navigateToAndClearBackStack(Screen.HomeScreen)
+            navigator.navigateToAndClearBackStack(Screen.HomeScreen, Screen.LoginScreen)
         onDispose { }
     }
 

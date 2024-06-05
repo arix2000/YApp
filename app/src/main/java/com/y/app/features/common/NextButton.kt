@@ -1,4 +1,4 @@
-package com.y.app.features.login.ui
+package com.y.app.features.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

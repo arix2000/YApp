@@ -41,9 +41,9 @@ import com.y.app.core.navigation.Screen
 import com.y.app.core.theme.YTheme
 import com.y.app.features.common.BackButton
 import com.y.app.features.common.ErrorBanner
+import com.y.app.features.common.NextButton
 import com.y.app.features.common.YOutlinedTextField
 import com.y.app.features.login.data.models.RegistrationResult
-import com.y.app.features.login.ui.NextButton
 import com.y.app.features.registration.data.UserBodyUi
 import com.y.app.features.registration.ui.RegistrationEvent
 import com.y.app.features.registration.ui.RegistrationState
@@ -68,7 +68,7 @@ fun RegistrationScreen(
                 context.getString(R.string.register_success_toast_message),
                 Toast.LENGTH_LONG
             ).show()
-            navigator.navigateToAndClearBackStack(Screen.LoginScreen)
+            navigator.navigateToAndClearBackStack(Screen.LoginScreen, Screen.RegistrationScreen)
         }
         onDispose { }
     }

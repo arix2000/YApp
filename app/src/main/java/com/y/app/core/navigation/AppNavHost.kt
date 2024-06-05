@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.y.app.features.home.AddPostScreen
+import com.y.app.features.addpost.AddPostScreen
 import com.y.app.features.home.HomeScreen
 import com.y.app.features.login.ui.LoginScreen
 import com.y.app.features.post.PostDetailsScreen

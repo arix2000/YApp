@@ -3,6 +3,7 @@ package com.y.app.core.di
 import com.y.app.core.local.DataStoreManager
 import com.y.app.core.navigation.Navigator
 import com.y.app.core.network.RetrofitClient
+import com.y.app.features.addpost.ui.AddPostViewModel
 import com.y.app.features.home.data.PostRepository
 import com.y.app.features.home.ui.HomeViewModel
 import com.y.app.features.login.data.UserRepository
@@ -27,4 +28,6 @@ val appModule = module {
     viewModel { RegistrationViewModel(get()) }
 
     viewModel { HomeViewModel(get()) }
+
+    viewModel { AddPostViewModel(get()) }
 }

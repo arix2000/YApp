@@ -15,3 +15,8 @@ fun String.withArgument(argumentName: String): String {
 fun String.putArgument(argumentName: String, argumentValue: String): String {
     return this.replace("{$argumentName}", argumentValue)
 }
+
+fun String.isUrl(): Boolean {
+    val urlPattern = "(?:https://|http://)\\w*\\.\\w*.*".toRegex()
+    return urlPattern.matches(this)
+}
