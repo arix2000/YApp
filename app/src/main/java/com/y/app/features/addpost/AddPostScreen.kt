@@ -11,12 +11,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -81,11 +83,12 @@ private fun AddPostScreenContent(
 
     var imageUrl by remember { mutableStateOf("") }
     var isImageLoaded: Boolean by remember { mutableStateOf(false) }
+    var isImageLoading: Boolean by remember { mutableStateOf(false) }
     val isDialogShowed = remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
-    Column {
+    Column(Modifier.imePadding()) {
         DefaultTopBar(title = "Add post", navigator = navigator)
         Spacer(modifier = Modifier.height(16.dp))
         Column(
@@ -109,7 +112,9 @@ private fun AddPostScreenContent(
             )
             Spacer(modifier = Modifier.height(8.dp))
             AddPostTextField(value = imageUrl,
-                errorText = if (imageUrl.isNotBlank() && !imageUrl.isUrl()) stringResource(R.string.invalid_url) else null,
+                errorText = if ((imageUrl.isNotBlank() && !imageUrl.isUrl()) || (!isImageLoaded && imageUrl.isNotBlank() && !isImageLoading)) stringResource(
+                    R.string.invalid_url
+                ) else null,
                 singleLine = true,
                 hint = stringResource(R.string.image_url_hint),
                 onValueChanged = {
@@ -134,15 +139,22 @@ private fun AddPostScreenContent(
                     modifier = Modifier
                         .heightIn(100.dp, 250.dp)
                         .fillMaxWidth()
-                        .clickable(enabled = imageUrl.isUrl()) {
+                        .clickable(enabled = isImageLoaded) {
                             isDialogShowed.value = true
                         },
-                    onSuccess = { isImageLoaded = true },
-                    onError = { isImageLoaded = false },
-                    onLoading = { isImageLoaded = false },
+                    onSuccess = { isImageLoaded = true; isImageLoading = false },
+                    onError = { isImageLoaded = false; isImageLoading = false },
+                    onLoading = { isImageLoaded = false; isImageLoading = true },
                     contentScale = ContentScale.FillWidth
                 )
-                if (!isImageLoaded) Text(text = stringResource(R.string.preview), fontSize = 24.sp)
+                if (!isImageLoaded) Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = stringResource(R.string.preview), fontSize = 24.sp)
+                    if (isImageLoading) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        CircularProgressIndicator()
+                    }
+                }
+
             }
             Spacer(modifier = Modifier.height(16.dp))
             NextButton(
@@ -153,7 +165,7 @@ private fun AddPostScreenContent(
                     else invokeEvent(
                         AddPostEvent.AddPost(
                             contentText,
-                            if (imageUrl.isBlank() || !imageUrl.isUrl()) null else imageUrl
+                            if (imageUrl.isBlank() || !imageUrl.isUrl() || !isImageLoaded) null else imageUrl
                         )
                     )
                 },

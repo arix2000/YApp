@@ -23,7 +23,7 @@
     <string name="reached_char_limit">The character limit has been reached</string>
     <string name="sup">What\'s up?</string>
     <string name="image_url_hint">Insert your image url (Optional)</string>
-    <string name="invalid_url">This is invalid url</string>
+    <string name="invalid_url">This is invalid image url</string>
     <string name="preview_image">Preview Image</string>
     <string name="preview">Preview</string>
     <string name="log_out">Log out</string>
