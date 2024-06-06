@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object RetrofitClient {
-    private const val BASE_URL = "https://TODO-TODO.todo/"
+    private const val BASE_URL = "http://192.168.1.21:8080/api/"
 
     fun create(): ApiService {
         return Retrofit.Builder()

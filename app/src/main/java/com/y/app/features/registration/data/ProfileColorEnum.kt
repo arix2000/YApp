@@ -31,13 +31,12 @@ enum class ProfileColorEnum(val color: Color) {
 
     fun toHex(): String {
         with(color) {
-            return String.format(
-                "#%08X",
-                (alpha * 255).toInt() shl 24 or
-                        (red * 255).toInt() shl 16 or
-                        (green * 255).toInt() shl 8 or
-                        (blue * 255).toInt()
-            )
+            val alpha = (alpha * 255).toInt().toString(16).padStart(2, '0')
+            val red = (red * 255).toInt().toString(16).padStart(2, '0')
+            val green = (green * 255).toInt().toString(16).padStart(2, '0')
+            val blue = (blue * 255).toInt().toString(16).padStart(2, '0')
+
+            return "#$alpha$red$green$blue".uppercase()
         }
     }
 

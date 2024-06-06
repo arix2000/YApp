@@ -18,10 +18,10 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @POST("login")
+    @POST("user/login")
     suspend fun login(@Body credentials: Credentials): User
 
-    @POST("register")
+    @POST("user/register")
     suspend fun register(@Body user: UserBody): RegistrationResponse
 
     @GET("user/{userId}")
@@ -36,16 +36,16 @@ interface ApiService {
         @Query("filter") filter: String
     ): List<Post>
 
-    @POST("post")
+    @POST("posts")
     suspend fun addPost(@Body post: PostBody)
 
     @GET("comments/{postId}")
     suspend fun getComments(@Path("postId") postId: Int): List<Comment>
 
     @POST("comments/{postId}")
-    suspend fun getComments(@Path("postId") postId: Int, @Body comment: CommentBody)
+    suspend fun addComment(@Path("postId") postId: Int, @Body comment: CommentBody)
 
-    @POST("post/like")
+    @POST("posts/like")
     suspend fun likePost(@Body postLikeBody: PostLikeBody)
 
     @POST("comments/like")

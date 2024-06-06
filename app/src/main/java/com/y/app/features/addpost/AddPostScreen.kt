@@ -42,6 +42,7 @@ import coil.compose.AsyncImage
 import com.arix.pokedex.features.pokemon_details.presentation.ui.components.full_screen_image_dialog.FullScreenImageDialog
 import com.y.app.R
 import com.y.app.core.navigation.Navigator
+import com.y.app.core.navigation.Screen
 import com.y.app.core.theme.YTheme
 import com.y.app.features.addpost.ui.AddPostEvent
 import com.y.app.features.addpost.ui.AddPostViewModel
@@ -60,7 +61,9 @@ fun AddPostScreen(
     navigator: Navigator = koinInject(), viewModel: AddPostViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
-    if (state.postAdded != null) navigator.popBackStack()
+    if (state.postAdded != null) navigator.navigateToAndClearBackStack(
+        Screen.HomeScreen, Screen.AddPostScreen
+    )
 
     AddPostScreenContent(state.isLoading, navigator) { event -> viewModel.invokeEvent(event) }
 
@@ -147,7 +150,12 @@ private fun AddPostScreenContent(
                 onClick = {
                     if (contentText.isBlank()) contentNotEmptyText =
                         context.getString(R.string.content_cannot_be_empty)
-                    else invokeEvent(AddPostEvent.AddPost(contentText, imageUrl))
+                    else invokeEvent(
+                        AddPostEvent.AddPost(
+                            contentText,
+                            if (imageUrl.isBlank() || !imageUrl.isUrl()) null else imageUrl
+                        )
+                    )
                 },
                 modifier = Modifier
                     .align(Alignment.End)
