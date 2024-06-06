@@ -1,7 +1,9 @@
 package com.y.app
 
+import com.y.app.features.home.data.models.Comment
 import com.y.app.features.home.data.models.Post
 import com.y.app.features.login.data.models.User
+import kotlin.random.Random
 
 val author1 = User(
     id = 1,
@@ -129,6 +131,44 @@ val posts = listOf(
         date = "2024-06-06T14:00:00"
     )
 )
+
+val users = listOf(author1, author2, author3)
+
+val sampleSentences = listOf(
+    "This is a great post! I really enjoyed reading it.",
+    "I completely agree with your points. Well said!",
+    "Interesting perspective, I hadn't considered that before.",
+    "Thank you for sharing this information, it's very helpful.",
+    "I have a different opinion on this topic, but I respect your view.",
+    "This was a very insightful read, looking forward to more posts like this.",
+    "Great analysis, you really broke down the topic well.",
+    "I learned something new today, thanks to your post.",
+    "Your writing style is very engaging, keep it up!",
+    "This topic is quite complex, but you explained it clearly."
+)
+
+fun randomContent(): String {
+    val numberOfSentences = Random.nextInt(1, 6)
+    return (1..numberOfSentences).joinToString(" ") { sampleSentences.random() }
+}
+
+fun randomDate(): String {
+    val year = (2020..2023).random()
+    val month = (1..12).random().toString().padStart(2, '0')
+    val day = (1..28).random().toString().padStart(2, '0')
+    return "$year-$month-$day"
+}
+
+val comments = (1..10).map { id ->
+    Comment(
+        id = id,
+        content = randomContent(),
+        user = users.random(),
+        likesCount = Random.nextInt(0, 100),
+        isLikedByMe = Random.nextBoolean(),
+        date = randomDate()
+    )
+}
 
 val oneUserPosts = listOf(
     Post(

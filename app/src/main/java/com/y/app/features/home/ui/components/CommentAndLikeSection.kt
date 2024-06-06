@@ -42,7 +42,7 @@ import com.y.app.features.home.data.models.Post
 import com.y.app.posts
 
 @Composable
-fun CommentAndLikeSection(post: Post, onCommentClicked: () -> Unit, onLikeClicked: () -> Unit) {
+fun CommentAndLikeSection(post: Post, onLikeClicked: () -> Unit) {
     val materialTheme = MaterialTheme.colorScheme
     var likeColor by remember {
         mutableStateOf(if (post.isLikedByMe) LikeColor else materialTheme.onBackground)
@@ -62,7 +62,7 @@ fun CommentAndLikeSection(post: Post, onCommentClicked: () -> Unit, onLikeClicke
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        IndicatorRow(onClick = { onCommentClicked() }) {
+        IndicatorRow {
             Icon(
                 imageVector = Icons.AutoMirrored.Default.Comment,
                 contentDescription = "comments",
@@ -91,12 +91,12 @@ fun CommentAndLikeSection(post: Post, onCommentClicked: () -> Unit, onLikeClicke
 }
 
 @Composable
-private fun IndicatorRow(onClick: () -> Unit, content: @Composable RowScope.() -> Unit) {
+private fun IndicatorRow(onClick: (() -> Unit)? = null, content: @Composable RowScope.() -> Unit) {
     Row(horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .clip(MaterialTheme.shapes.medium)
-            .clickable { onClick() }
+            .clickable { if (onClick != null) onClick() }
             .padding(8.dp)) {
         content()
     }
@@ -107,7 +107,7 @@ private fun IndicatorRow(onClick: () -> Unit, content: @Composable RowScope.() -
 private fun CommentAndLikeSectionPreview() {
     YTheme {
         Surface {
-            CommentAndLikeSection(posts.first(), {}, {})
+            CommentAndLikeSection(posts.first()) {}
         }
     }
 }

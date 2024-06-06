@@ -62,7 +62,7 @@ fun AddPostScreen(
 ) {
     val state = viewModel.state.collectAsState().value
     if (state.postAdded != null) navigator.navigateToAndClearBackStack(
-        Screen.HomeScreen, Screen.AddPostScreen
+        Screen.HomeScreen, Screen.HomeScreen
     )
 
     AddPostScreenContent(state.isLoading, navigator) { event -> viewModel.invokeEvent(event) }

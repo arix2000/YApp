@@ -123,7 +123,7 @@ private fun RegistrationScreenContent(
             value = user.email,
             label = stringResource(id = R.string.e_mail_label),
             onValueChange = {
-                invokeEvent(RegistrationEvent.UpdateUser(user.copy(email = it)))
+                invokeEvent(RegistrationEvent.UpdateUser(user.copy(email = it.lowercase())))
             },
             validationResult = user.validateEmail()
         )

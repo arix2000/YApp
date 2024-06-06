@@ -28,4 +28,10 @@ class DataStoreManager(context: Context) {
             preferences[USER_USER_KEY] = user.toJson()
         }
     }
+
+    suspend fun clearUser() {
+        dataStore.edit { preferences ->
+            preferences.remove(USER_USER_KEY)
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.y.app.features.home.data.models.bodies
+package com.y.app.features.post.data
 
 data class CommentLikeBody(
     val userId: Int,

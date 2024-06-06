@@ -24,7 +24,7 @@ import com.y.app.R
 import com.y.app.core.theme.YTheme
 
 @Composable
-fun EmptyHomeScreen() {
+fun EmptyHomeScreen(text: String) {
     Box(Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -39,7 +39,7 @@ fun EmptyHomeScreen() {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = stringResource(R.string.empty_home_text),
+                text = text,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center
             )
@@ -52,7 +52,7 @@ fun EmptyHomeScreen() {
 private fun EmptyHomeScreenPreview() {
     YTheme {
         Surface {
-            EmptyHomeScreen()
+            EmptyHomeScreen(stringResource(R.string.empty_home_text))
         }
     }
 }

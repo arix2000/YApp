@@ -34,6 +34,7 @@ fun ErrorBanner(
     errorMessage: String?,
     modifier: Modifier = Modifier,
     visibilityDelay: Long = 4000,
+    alignment: Alignment = Alignment.BottomCenter
 ) {
     var message: String? by remember { mutableStateOf(null) }
     val coroutineScope = rememberCoroutineScope()
@@ -47,11 +48,11 @@ fun ErrorBanner(
         }
         onDispose { }
     }
-    Box(modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+    Box(modifier.fillMaxSize(), contentAlignment = alignment) {
         AnimatedVisibility(
             visible = message != null,
-            enter = slideIn(tween(200), initialOffset = { IntOffset(0, it.height) }),
-            exit = slideOut(tween(200), targetOffset = { IntOffset(0, it.height) }),
+            enter = slideIn(tween(300), initialOffset = { IntOffset(it.width, 0) }),
+            exit = slideOut(tween(200), targetOffset = { IntOffset(-it.width, 0) }),
         ) {
             BackgroundAwareText(
                 modifier = modifier

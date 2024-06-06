@@ -2,13 +2,13 @@ package com.y.app.core.network
 
 import com.y.app.features.home.data.models.Comment
 import com.y.app.features.home.data.models.Post
-import com.y.app.features.home.data.models.bodies.CommentBody
-import com.y.app.features.home.data.models.bodies.CommentLikeBody
 import com.y.app.features.home.data.models.bodies.PostBody
 import com.y.app.features.home.data.models.bodies.PostLikeBody
 import com.y.app.features.login.data.models.Credentials
 import com.y.app.features.login.data.models.RegistrationResponse
 import com.y.app.features.login.data.models.User
+import com.y.app.features.post.data.CommentBody
+import com.y.app.features.post.data.CommentLikeBody
 import com.y.app.features.registration.data.UserBody
 import retrofit2.http.Body
 import retrofit2.http.GET

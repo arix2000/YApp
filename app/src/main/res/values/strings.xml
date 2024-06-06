@@ -26,4 +26,6 @@
     <string name="invalid_url">This is invalid url</string>
     <string name="preview_image">Preview Image</string>
     <string name="preview">Preview</string>
+    <string name="log_out">Log out</string>
+    <string name="no_post_yet_text">There are no posts yet.</string>
 </resources>

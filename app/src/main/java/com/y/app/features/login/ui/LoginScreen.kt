@@ -46,6 +46,7 @@ import com.y.app.R
 import com.y.app.core.navigation.Navigator
 import com.y.app.core.navigation.Screen
 import com.y.app.core.theme.YTheme
+import com.y.app.features.common.ErrorBanner
 import com.y.app.features.common.NextButton
 import com.y.app.features.common.YOutlinedTextField
 import com.y.app.features.login.ui.state.LoginEvent
@@ -75,8 +76,9 @@ private fun LoginScreenContent(
     val focusManager = LocalFocusManager.current
 
     DisposableEffect(state.user) {
-        if (state.user != null)
-            navigator.navigateToAndClearBackStack(Screen.HomeScreen, Screen.LoginScreen)
+        if (state.user != null) navigator.navigateToAndClearBackStack(
+            Screen.HomeScreen, Screen.LoginScreen
+        )
         onDispose { }
     }
 
@@ -91,7 +93,9 @@ private fun LoginScreenContent(
     ) {
         Image(
             modifier = Modifier
-                .border(1.dp, MaterialTheme.colorScheme.onBackground, shape = CircleShape)
+                .border(
+                    1.dp, MaterialTheme.colorScheme.onBackground, shape = CircleShape
+                )
                 .clip(CircleShape),
             painter = painterResource(id = R.drawable.logo_y_app),
             contentDescription = "Y logo"
@@ -117,11 +121,9 @@ private fun LoginScreenContent(
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next
                 ),
-                keyboardActions = KeyboardActions(
-                    onNext = {
-                        focusManager.moveFocus(FocusDirection.Down)
-                    }
-                ),
+                keyboardActions = KeyboardActions(onNext = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                }),
             )
             YOutlinedTextField(
                 value = passText,
@@ -151,25 +153,15 @@ private fun LoginScreenContent(
             )
         }
     }
-    if (state.errorMessage != null)
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 24.dp),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            Text(
-                text = stringResource(R.string.login_screen_error_message),
-                color = MaterialTheme.colorScheme.error
-            )
-        }
+    ErrorBanner(
+        errorMessage = if (state.errorMessage != null) stringResource(R.string.login_screen_error_message) else null,
+        alignment = Alignment.TopCenter
+    )
 }
 
 @Composable
 fun SignUpButton(navigator: Navigator) {
-    Box(
-        modifier = Modifier
-            .clickable { navigator.navigateTo(Screen.RegistrationScreen) }) {
+    Box(modifier = Modifier.clickable { navigator.navigateTo(Screen.RegistrationScreen) }) {
         Text(
             text = stringResource(R.string.no_acount_button),
             color = MaterialTheme.colorScheme.primary
