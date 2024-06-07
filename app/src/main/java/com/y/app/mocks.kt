@@ -3,6 +3,7 @@ package com.y.app
 import com.y.app.features.home.data.models.Comment
 import com.y.app.features.home.data.models.Post
 import com.y.app.features.login.data.models.User
+import java.time.LocalDateTime
 import kotlin.random.Random
 
 val author1 = User(
@@ -37,7 +38,7 @@ val posts = listOf(
         likesCount = 42,
         commentsCount = 5,
         isLikedByMe = true,
-        imageUrl = "https://example.com/image1.jpg",
+        imageUrl = "",
         date = "2024-06-04T16:39:00"
     ),
     Post(
@@ -163,10 +164,10 @@ val comments = (1..10).map { id ->
     Comment(
         id = id,
         content = randomContent(),
-        user = users.random(),
+        author = author3,
         likesCount = Random.nextInt(0, 100),
         isLikedByMe = Random.nextBoolean(),
-        date = randomDate()
+        date = LocalDateTime.now().minusHours(2).toString()
     )
 }
 

@@ -1,7 +1,9 @@
 package com.y.app.core.navigation
 
+import androidx.core.os.bundleOf
 import androidx.navigation.NavHostController
 import com.y.app.features.common.extensions.putArgument
+import com.y.app.features.home.data.models.Post
 
 class Navigator {
     private lateinit var navController: NavHostController
@@ -19,6 +21,13 @@ class Navigator {
             navController.navigate(
                 screen.route.putArgument(screen.argName, argument)
             )
+        }
+    }
+
+    fun navigateToPostDetails(post: Post) {
+        val nodeId = navController.graph.findNode(route = Screen.PostDetailsScreen.route)?.id
+        if (nodeId != null) {
+            navController.navigate(nodeId, bundleOf(Screen.PostDetailsScreen.argName!! to post))
         }
     }
 

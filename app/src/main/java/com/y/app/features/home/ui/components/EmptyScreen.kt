@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,7 +25,7 @@ import com.y.app.R
 import com.y.app.core.theme.YTheme
 
 @Composable
-fun EmptyHomeScreen(text: String) {
+fun EmptyScreen(text: String, icon: ImageVector = Icons.Default.NoFlash) {
     Box(Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -33,7 +34,7 @@ fun EmptyHomeScreen(text: String) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = Icons.Default.NoFlash,
+                imageVector = icon,
                 contentDescription = "No posts",
                 modifier = Modifier.size(100.dp)
             )
@@ -52,7 +53,7 @@ fun EmptyHomeScreen(text: String) {
 private fun EmptyHomeScreenPreview() {
     YTheme {
         Surface {
-            EmptyHomeScreen(stringResource(R.string.empty_home_text))
+            EmptyScreen(stringResource(R.string.empty_home_text))
         }
     }
 }

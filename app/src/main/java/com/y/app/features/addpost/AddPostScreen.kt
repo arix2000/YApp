@@ -56,7 +56,7 @@ import com.y.app.features.common.extensions.isUrl
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
-private const val MAX_CHAR_COUNT = 500
+private const val MAX_CHAR_COUNT = 250
 
 @Composable
 fun AddPostScreen(

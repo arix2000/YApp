@@ -40,7 +40,7 @@ interface ApiService {
     suspend fun addPost(@Body post: PostBody)
 
     @GET("comments/{postId}")
-    suspend fun getComments(@Path("postId") postId: Int): List<Comment>
+    suspend fun getComments(@Path("postId") postId: Int, @Query("userId") userId: Int): List<Comment>
 
     @POST("comments/{postId}")
     suspend fun addComment(@Path("postId") postId: Int, @Body comment: CommentBody)

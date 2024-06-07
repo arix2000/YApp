@@ -36,7 +36,7 @@ import com.y.app.features.common.DefaultLoadingScreen
 import com.y.app.features.common.DefaultTopBar
 import com.y.app.features.common.ErrorBanner
 import com.y.app.features.home.data.models.Post
-import com.y.app.features.home.ui.components.EmptyHomeScreen
+import com.y.app.features.home.ui.components.EmptyScreen
 import com.y.app.features.home.ui.components.PostItem
 import com.y.app.features.login.data.models.User
 import com.y.app.features.profile.ui.ProfileEvent
@@ -91,18 +91,20 @@ private fun ProfileScreenContent(
         Spacer(modifier = Modifier.height(16.dp))
         if (posts.isNotEmpty()) LazyColumn {
             items(posts) { post ->
-                PostItem(post = post, onPostClicked = {
-                    navigator.navigateTo(
-                        Screen.PostDetailsScreen, post.id.toString()
-                    )
-                }, onProfileClicked = { userId ->
-                    if (user.id != userId) navigator.navigateTo(
-                        Screen.ProfileScreen, userId.toString()
-                    )
-                }, onLikeClicked = { onLikeClicked(invokeEvent, post, user.id, posts) })
+                PostItem(post = post,
+                    modifier = Modifier.padding(bottom = 8.dp, start = 8.dp, end = 8.dp),
+                    onPostClicked = {
+                        navigator.navigateToPostDetails(post)
+                    },
+                    onProfileClicked = { userId ->
+                        if (user.id != userId) navigator.navigateTo(
+                            Screen.ProfileScreen, userId.toString()
+                        )
+                    },
+                    onLikeClicked = { onLikeClicked(invokeEvent, post, user.id, posts) })
             }
         } else Box(modifier = Modifier.height(400.dp)) {
-            EmptyHomeScreen(stringResource(R.string.no_post_yet_text))
+            EmptyScreen(stringResource(R.string.no_post_yet_text))
         }
     }
 }

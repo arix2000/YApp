@@ -41,7 +41,7 @@ import com.y.app.features.home.data.models.PostFilterEnum
 import com.y.app.features.home.ui.HomeEvent
 import com.y.app.features.home.ui.HomeState
 import com.y.app.features.home.ui.HomeViewModel
-import com.y.app.features.home.ui.components.EmptyHomeScreen
+import com.y.app.features.home.ui.components.EmptyScreen
 import com.y.app.features.home.ui.components.PostItem
 import com.y.app.posts
 import org.koin.androidx.compose.koinViewModel
@@ -59,7 +59,7 @@ fun HomeScreen(navigator: Navigator = koinInject(), viewModel: HomeViewModel = k
     } else if (state.posts?.isEmpty() == true && state.user != null) {
         Column {
             HomeTopBar(navigator = navigator, user = state.user)
-            EmptyHomeScreen(stringResource(R.string.empty_home_text))
+            EmptyScreen(stringResource(R.string.empty_home_text))
         }
     }
     HomeFloatingActionButton(navigator)
@@ -89,15 +89,19 @@ fun HomeScreenContent(
             LazyColumn {
                 item { Spacer(modifier = Modifier.height(24.dp)) }
                 items(posts) { post ->
-                    PostItem(post = post, onPostClicked = {
-                        navigator.navigateTo(Screen.PostDetailsScreen, post.id.toString())
-                    }, { userId: Int ->
-                        navigator.navigateTo(
-                            Screen.ProfileScreen, userId.toString()
-                        )
-                    }, {
-                        onLikeClicked(invokeEvent, post, user.id, posts)
-                    })
+                    PostItem(post = post,
+                        modifier = Modifier.padding(bottom = 8.dp, start = 8.dp, end = 8.dp),
+                        onPostClicked = {
+                            navigator.navigateToPostDetails(post)
+                        },
+                        onProfileClicked = { userId: Int ->
+                            navigator.navigateTo(
+                                Screen.ProfileScreen, userId.toString()
+                            )
+                        },
+                        onLikeClicked = {
+                            onLikeClicked(invokeEvent, post, user.id, posts)
+                        })
                 }
                 item { Spacer(modifier = Modifier.height(80.dp)) }
             }
@@ -126,7 +130,7 @@ private fun HomeFloatingActionButton(navigator: Navigator) {
 private fun onLikeClicked(
     invokeEvent: (HomeEvent) -> Unit, post: Post, userId: Int, posts: SnapshotStateList<Post>
 ) {
-    invokeEvent(HomeEvent.LikePost(post.id, userId))
+    invokeEvent(HomeEvent.LikePost(userId, post.id))
     val index = posts.indexOf(post)
     if (index != -1) {
         posts[index] = post.copy(

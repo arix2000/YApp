@@ -25,8 +25,8 @@ class PostRepository(private val apiService: ApiService, private val dataStore: 
         return dataStore.user
     }
 
-    suspend fun getComments(postId: Int): ApiResponse<List<Comment>> {
-        return makeHttpRequest { apiService.getComments(postId) }
+    suspend fun getComments(postId: Int, userId: Int): ApiResponse<List<Comment>> {
+        return makeHttpRequest { apiService.getComments(postId, userId) }
     }
 
     suspend fun addComment(postId: Int, commentBody: CommentBody): ApiResponse<Unit> {

@@ -28,4 +28,8 @@
     <string name="preview">Preview</string>
     <string name="log_out">Log out</string>
     <string name="no_post_yet_text">There are no posts yet.</string>
+    <string name="post_details_title">%1$s\'s post</string>
+    <string name="post_your_reply">Post your reply</string>
+    <string name="no_comments_yet_text">There are no comments yet but you can add yours below!</string>
+    <string name="just_now">Just now</string>
 </resources>

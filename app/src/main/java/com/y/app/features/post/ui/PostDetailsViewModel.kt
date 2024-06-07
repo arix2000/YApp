@@ -1,0 +1,114 @@
+package com.y.app.features.post.ui
+
+import androidx.compose.runtime.toMutableStateList
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.y.app.core.local.DataStoreManager
+import com.y.app.features.home.data.PostRepository
+import com.y.app.features.home.data.models.bodies.PostLikeBody
+import com.y.app.features.post.data.CommentBody
+import com.y.app.features.post.data.CommentLikeBody
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+class PostDetailsViewModel(
+    private val postRepository: PostRepository, private val dataStore: DataStoreManager
+) : ViewModel() {
+
+    private val _state: MutableStateFlow<PostDetailsState> = MutableStateFlow(PostDetailsState())
+    val state get() = _state.asStateFlow()
+
+    init {
+        getUser()
+    }
+
+    private fun getUser() {
+        viewModelScope.launch {
+            dataStore.user.collect { user ->
+                _state.update { it.copy(user = user) }
+            }
+        }
+    }
+
+    fun invokeEvent(event: PostDetailsEvent) {
+        when (event) {
+            is PostDetailsEvent.AddComment -> addComment(event)
+            is PostDetailsEvent.GetComments -> getComments(event.postId)
+            is PostDetailsEvent.LikeComment -> likeComment(event.commentId)
+            is PostDetailsEvent.LikePost -> likePost(event.postId)
+        }
+    }
+
+    private fun likePost(postId: Int) {
+        viewModelScope.launch {
+            val userId = state.value.user?.id
+            if (userId != null) postRepository.likePost(PostLikeBody(userId, postId)).collect(
+                onSuccess = { /** Do nothing **/ }, onError = ::onError
+            )
+        }
+    }
+
+    private fun addComment(event: PostDetailsEvent.AddComment) {
+        viewModelScope.launch {
+            _state.update { it.copy(isAddCommentLoading = true) }
+            dataStore.user.collect { user ->
+                if (user != null) postRepository.addComment(
+                    event.postId, CommentBody(event.content, user.id)
+                ).collect(
+                    onSuccess = {
+                        postRepository.getComments(event.postId, user.id).collect(
+                            onSuccess = { comments ->
+                                _state.update {
+                                    it.copy(
+                                        isAddCommentLoading = false,
+                                        comments = comments.toMutableStateList()
+                                    )
+                                }
+                            }, onError = ::onError
+                        )
+                    },
+                    onError = ::onError,
+                )
+            }
+        }
+    }
+
+    private fun getComments(postId: Int) {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            dataStore.user.collect { user ->
+                if (user != null) {
+                    postRepository.getComments(postId, user.id).collect(
+                        onSuccess = { comments ->
+                            _state.update {
+                                it.copy(isLoading = false, comments = comments.toMutableStateList())
+                            }
+                        },
+                        onError = ::onError,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun likeComment(commentId: Int) {
+        viewModelScope.launch {
+            dataStore.user.collect { user ->
+                if (user != null) {
+                    postRepository.likeComment(CommentLikeBody(user.id, commentId)).collect(
+                        onSuccess = { /** Do nothing **/ }, onError = ::onError
+                    )
+                }
+            }
+        }
+    }
+
+    private fun onError(message: String) {
+        _state.update {
+            it.copy(errorMessage = message, isLoading = false, isAddCommentLoading = false)
+        }
+    }
+
+}

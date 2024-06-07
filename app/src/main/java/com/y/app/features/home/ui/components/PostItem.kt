@@ -2,7 +2,6 @@ package com.y.app.features.home.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -12,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,22 +22,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextLayoutResult
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.arix.pokedex.features.pokemon_details.presentation.ui.components.full_screen_image_dialog.FullScreenImageDialog
 import com.y.app.R
 import com.y.app.core.theme.YTheme
-import com.y.app.features.common.Avatar
-import com.y.app.features.common.extensions.toProfileColor
 import com.y.app.features.common.extensions.toPx
 import com.y.app.features.home.data.models.Post
 import com.y.app.posts
@@ -52,18 +46,22 @@ fun PostItem(
     onPostClicked: () -> Unit,
     onProfileClicked: (userId: Int) -> Unit,
     onLikeClicked: () -> Unit,
+    modifier: Modifier = Modifier,
+    isPostClickEnabled: Boolean = true,
+    shape: Shape = MaterialTheme.shapes.extraLarge,
+    backgroundColor: Color = MaterialTheme.colorScheme.onSecondary,
+    contentMaxLines: Int = 8,
 ) {
     val author = post.author
     val context = LocalContext.current
     val textMeasurer = rememberTextMeasurer()
     val isDialogShowed = remember { mutableStateOf(false) }
-    BoxWithConstraints(modifier = Modifier
+    BoxWithConstraints(modifier = modifier
         .fillMaxWidth()
-        .padding(bottom = 8.dp, start = 8.dp, end = 8.dp)
-        .clip(MaterialTheme.shapes.extraLarge)
-        .clickable { onPostClicked() }
+        .clip(shape)
+        .clickable(isPostClickEnabled) { onPostClicked() }
         .background(
-            MaterialTheme.colorScheme.onSecondary, shape = MaterialTheme.shapes.extraLarge
+            backgroundColor, shape = shape
         )
         .padding(16.dp)) {
         val textLayoutResult: TextLayoutResult = textMeasurer.measure(
@@ -76,29 +74,8 @@ fun PostItem(
             Box {
                 Column {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Row(verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .clip(
-                                    CircleShape
-                                )
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null
-                                ) {
-                                    onProfileClicked(post.author.id)
-                                }) {
-                            Avatar(
-                                firstName = author.name,
-                                avatarColor = author.avatarColor.toProfileColor(),
-                                avatarSize = 28.dp,
-                                fontSize = 18.sp
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = author.fullName,
-                                fontWeight = FontWeight.SemiBold,
-                                maxLines = 1
-                            )
+                        AvatarHeader(user = author) {
+                            onProfileClicked(post.author.id)
                         }
                         Spacer(modifier = Modifier.weight(1.0f))
                         Text(
@@ -107,16 +84,17 @@ fun PostItem(
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = post.content, maxLines = 8)
+                    Text(text = post.content, maxLines = contentMaxLines)
                 }
-                if (textLayoutResult.lineCount > 8) TextFadingOverlay(
+                if (textLayoutResult.lineCount > contentMaxLines) TextFadingOverlay(
                     modifier = Modifier.align(
                         Alignment.BottomCenter
                     )
                 )
             }
-            if(!post.imageUrl.isNullOrBlank())
-                ImageSection(post.imageUrl, onClick = { isDialogShowed.value = true })
+            if (!post.imageUrl.isNullOrBlank()) ImageSection(
+                post.imageUrl,
+                onClick = { isDialogShowed.value = true })
             CommentAndLikeSection(post, onLikeClicked = onLikeClicked)
         }
     }

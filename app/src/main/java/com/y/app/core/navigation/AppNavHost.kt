@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.y.app.features.addpost.AddPostScreen
 import com.y.app.features.home.HomeScreen
+import com.y.app.features.home.data.models.Post
 import com.y.app.features.login.ui.LoginScreen
 import com.y.app.features.post.PostDetailsScreen
 import com.y.app.features.profile.ProfileScreen
@@ -35,8 +36,10 @@ fun AppNavHost() {
         composable(Screen.RegistrationScreen.route) {
             RegistrationScreen()
         }
-        composable(Screen.PostDetailsScreen.route) { backStack ->
-            backStack.arguments?.getString(Screen.PostDetailsScreen.argName)?.let {
+        composable(
+            Screen.PostDetailsScreen.route
+        ) { backStack ->
+            backStack.arguments?.getParcelable<Post>(Screen.PostDetailsScreen.argName)?.let {
                 PostDetailsScreen(it)
             }
         }

@@ -35,21 +35,26 @@ class RegistrationViewModel(private val userRepository: UserRepository) : ViewMo
         registerJob?.cancel()
         registerJob = viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            userRepository.registerUser(userBodyUiState.value.toUserBody()).collect(
-                onSuccess = { response ->
+            userRepository.registerUser(userBodyUiState.value.toUserBody())
+                .collect(onSuccess = { response ->
                     _state.update {
                         it.copy(
-                            registrationResult = response.registrationResult,
-                            isLoading = false
+                            registrationResult = response.result, isLoading = false
                         )
                     }
-                    if (response.registrationResult == RegistrationResult.EMAIL_TAKEN)
+                }, onError = { message ->
+                    if (message.contains("409")) {
                         _userUiState.value.emailTaken = true
-                },
-                onError = { message ->
-                    _state.update { it.copy(errorMessage = message, isLoading = false) }
-                }
-            )
+                        _state.update {
+                            it.copy(
+                                registrationResult = RegistrationResult.EMAIL_TAKEN,
+                                isLoading = false
+                            )
+                        }
+                    } else {
+                        _state.update { it.copy(errorMessage = message, isLoading = false) }
+                    }
+                })
         }
     }
 }

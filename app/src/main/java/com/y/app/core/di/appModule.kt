@@ -8,6 +8,7 @@ import com.y.app.features.home.data.PostRepository
 import com.y.app.features.home.ui.HomeViewModel
 import com.y.app.features.login.data.UserRepository
 import com.y.app.features.login.ui.state.LoginViewModel
+import com.y.app.features.post.ui.PostDetailsViewModel
 import com.y.app.features.profile.ui.ProfileViewModel
 import com.y.app.features.registration.ui.RegistrationViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -33,4 +34,6 @@ val appModule = module {
     viewModel { AddPostViewModel(get()) }
 
     viewModel { ProfileViewModel(get(), get(), get()) }
+
+    viewModel { PostDetailsViewModel(get(), get()) }
 }

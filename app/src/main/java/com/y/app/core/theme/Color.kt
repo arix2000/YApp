@@ -11,4 +11,5 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val LikeColor = Color(0xFFE73D55)
+val DisabledButtonBackgroundColor = Color(0xFF323536)
 
