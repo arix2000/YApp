@@ -107,7 +107,7 @@ private fun PostDetailsScreenContent(
                         backgroundColor = Color.Transparent
                     )
                 }
-                if (!state.comments.isNullOrEmpty()) items(
+                if (!state.comments.isEmpty()) items(
                     state.comments,
                     key = { comment -> comment.id }) { comment ->
                     Box(modifier = Modifier.animateItemPlacement(tween())) {

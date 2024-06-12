@@ -37,6 +37,13 @@ class Navigator {
         }
     }
 
+    suspend fun listenOnBackStack(currentScreen: Screen, onBackToScreen: () -> Unit) {
+        navController.currentBackStackEntryFlow.collect { backStackEntry ->
+            if (backStackEntry.destination.route == currentScreen.route)
+                onBackToScreen()
+        }
+    }
+
     fun popBackStack() {
         navController.popBackStack()
     }

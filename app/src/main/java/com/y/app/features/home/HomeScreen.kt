@@ -82,6 +82,12 @@ fun HomeScreenContent(
         posts.addAll(inputPosts)
     }
 
+    LaunchedEffect(Unit) {
+        navigator.listenOnBackStack(Screen.HomeScreen) {
+            invokeEvent(HomeEvent.RefreshPosts(PostFilterEnum.NEW, visible = false))
+        }
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         HomeTopBar(navigator, user)
         Spacer(modifier = Modifier.height(8.dp))

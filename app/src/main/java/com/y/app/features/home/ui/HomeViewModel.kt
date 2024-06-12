@@ -23,7 +23,7 @@ class HomeViewModel(private val postRepository: PostRepository) : ViewModel() {
         when (event) {
             is HomeEvent.GetPosts -> getPostsAndUser(event.filter)
             is HomeEvent.LikePost -> likePost(event)
-            is HomeEvent.RefreshPosts -> refreshPosts(event.filter)
+            is HomeEvent.RefreshPosts -> refreshPosts(event.filter, event.visible)
         }
     }
 
@@ -36,9 +36,9 @@ class HomeViewModel(private val postRepository: PostRepository) : ViewModel() {
         }
     }
 
-    private fun refreshPosts(filter: PostFilterEnum) {
+    private fun refreshPosts(filter: PostFilterEnum, visible: Boolean) {
         viewModelScope.launch {
-            _state.update { it.copy(isRefreshing = true) }
+            _state.update { it.copy(isRefreshing = visible) }
             postRepository.getPosts(filter).collect(
                 onSuccess = { posts ->
                     _state.update {
