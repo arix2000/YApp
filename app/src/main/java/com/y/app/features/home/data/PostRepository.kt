@@ -4,7 +4,7 @@ import com.y.app.core.local.DataStoreManager
 import com.y.app.core.network.ApiResponse
 import com.y.app.core.network.ApiService
 import com.y.app.core.network.BaseRepository
-import com.y.app.features.home.data.models.Comment
+import com.y.app.features.post.data.Comment
 import com.y.app.features.home.data.models.Post
 import com.y.app.features.home.data.models.PostFilterEnum
 import com.y.app.features.home.data.models.bodies.PostBody

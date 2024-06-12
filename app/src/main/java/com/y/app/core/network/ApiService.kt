@@ -1,6 +1,6 @@
 package com.y.app.core.network
 
-import com.y.app.features.home.data.models.Comment
+import com.y.app.features.post.data.Comment
 import com.y.app.features.home.data.models.Post
 import com.y.app.features.home.data.models.bodies.PostBody
 import com.y.app.features.home.data.models.bodies.PostLikeBody

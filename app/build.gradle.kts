@@ -5,6 +5,7 @@ plugins {
 }
 
 android {
+
     namespace = "com.y.app"
     compileSdk = 34
 
@@ -12,8 +13,8 @@ android {
         applicationId = "com.y.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -31,11 +32,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -73,6 +74,11 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.coil.compose)
     implementation (libs.logging.interceptor)
+    implementation(libs.okhttp)
+    implementation("org.hildan.krossbow:krossbow-stomp-core:7.0.0")
+    implementation("org.hildan.krossbow:krossbow-websocket-okhttp:7.0.0")
+    implementation(libs.java.websocket)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

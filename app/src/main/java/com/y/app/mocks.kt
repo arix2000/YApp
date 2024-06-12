@@ -1,8 +1,8 @@
 package com.y.app
 
-import com.y.app.features.home.data.models.Comment
 import com.y.app.features.home.data.models.Post
 import com.y.app.features.login.data.models.User
+import com.y.app.features.post.data.Comment
 import java.time.LocalDateTime
 import kotlin.random.Random
 
@@ -151,13 +151,6 @@ val sampleSentences = listOf(
 fun randomContent(): String {
     val numberOfSentences = Random.nextInt(1, 6)
     return (1..numberOfSentences).joinToString(" ") { sampleSentences.random() }
-}
-
-fun randomDate(): String {
-    val year = (2020..2023).random()
-    val month = (1..12).random().toString().padStart(2, '0')
-    val day = (1..28).random().toString().padStart(2, '0')
-    return "$year-$month-$day"
 }
 
 val comments = (1..10).map { id ->

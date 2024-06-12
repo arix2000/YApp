@@ -1,5 +1,7 @@
 package com.y.app.features.post
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CommentsDisabled
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,16 +30,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.y.app.R
 import com.y.app.author1
+import com.y.app.comments
 import com.y.app.core.navigation.Navigator
 import com.y.app.core.navigation.Screen
 import com.y.app.core.theme.YTheme
 import com.y.app.features.common.DefaultLoadingScreen
 import com.y.app.features.common.DefaultTopBar
 import com.y.app.features.common.ErrorBanner
-import com.y.app.features.home.data.models.Comment
 import com.y.app.features.home.data.models.Post
 import com.y.app.features.home.ui.components.EmptyScreen
 import com.y.app.features.home.ui.components.PostItem
+import com.y.app.features.post.data.Comment
 import com.y.app.features.post.ui.PostDetailsEvent
 import com.y.app.features.post.ui.PostDetailsState
 import com.y.app.features.post.ui.PostDetailsViewModel
@@ -65,6 +69,7 @@ fun PostDetailsScreen(
     ErrorBanner(errorMessage = state.errorMessage)
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PostDetailsScreenContent(
     post: Post,
@@ -73,6 +78,10 @@ private fun PostDetailsScreenContent(
     navigator: Navigator,
 ) {
     var mutablePost by remember { mutableStateOf(post) }
+    DisposableEffect(state.comments!!.size) {
+        mutablePost = mutablePost.copy(commentsCount = state.comments.size)
+        onDispose {  }
+    }
     Box(modifier = Modifier.imePadding()) {
         Column {
             DefaultTopBar(
@@ -81,8 +90,7 @@ private fun PostDetailsScreenContent(
             )
             LazyColumn {
                 item {
-                    PostItem(
-                        post = mutablePost,
+                    PostItem(post = mutablePost,
                         onPostClicked = {},
                         onProfileClicked = { userId: Int ->
                             navigator.navigateTo(Screen.ProfileScreen, userId.toString())
@@ -98,14 +106,17 @@ private fun PostDetailsScreenContent(
                         contentMaxLines = Int.MAX_VALUE,
                         backgroundColor = Color.Transparent
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
-                if (!state.comments.isNullOrEmpty()) items(state.comments) { comment ->
-                    CommentItem(comment = comment,
-                        onLikeClicked = { onLikeClicked(invokeEvent, comment, state.comments) },
-                        onProfileClicked = { userId: Int ->
-                            navigator.navigateTo(Screen.ProfileScreen, userId.toString())
-                        })
+                if (!state.comments.isNullOrEmpty()) items(
+                    state.comments,
+                    key = { comment -> comment.id }) { comment ->
+                    Box(modifier = Modifier.animateItemPlacement(tween())) {
+                        CommentItem(comment = comment,
+                            onLikeClicked = { onLikeClicked(invokeEvent, comment, state.comments) },
+                            onProfileClicked = { userId: Int ->
+                                navigator.navigateTo(Screen.ProfileScreen, userId.toString())
+                            })
+                    }
                 }
                 else item {
                     EmptyScreen(
@@ -117,7 +128,6 @@ private fun PostDetailsScreenContent(
             }
         }
         AddCommentSection(state.user!!, onAddClicked = {
-            mutablePost = mutablePost.copy(commentsCount = mutablePost.commentsCount.inc())
             invokeEvent(PostDetailsEvent.AddComment(post.id, it))
         })
     }
@@ -142,10 +152,10 @@ private fun PostDetailsScreenPreview() {
     YTheme {
         Surface {
             PostDetailsScreenContent(
-                posts.first(),
-                PostDetailsState(comments = listOf<Comment>().toMutableStateList(), user = author1),
-                { },
-                Navigator()
+                posts.first(), PostDetailsState(
+                    comments = comments.toMutableStateList()
+                        .apply { add(0, comments.first().copy(isNew = true, id = 99)) }, user = author1
+                ), { }, Navigator()
             )
         }
     }

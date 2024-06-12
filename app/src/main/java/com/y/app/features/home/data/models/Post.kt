@@ -23,6 +23,9 @@ data class Post(
     val imageUrl: String?,
     private val date: String
 ) : Parcelable {
+
+    val dateTime: LocalDateTime get() = LocalDateTime.parse(date)
+
     fun getDateTimeDisplayText(context: Context): String {
         val dateTime = LocalDateTime.parse(date)
         val currentDateTime = LocalDateTime.now()

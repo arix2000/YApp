@@ -1,7 +1,7 @@
 package com.y.app.features.post.ui
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.y.app.features.home.data.models.Comment
+import com.y.app.features.post.data.Comment
 import com.y.app.features.login.data.models.User
 
 data class PostDetailsState(

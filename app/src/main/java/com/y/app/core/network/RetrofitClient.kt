@@ -7,7 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object RetrofitClient {
-    private const val BASE_URL = "http://192.168.1.21:8080/api/"
+    const val BASE_URL_HOST = "192.168.1.21:8080"
+    private const val BASE_URL = "http://${BASE_URL_HOST}/api/"
 
     fun create(): ApiService {
         return Retrofit.Builder()

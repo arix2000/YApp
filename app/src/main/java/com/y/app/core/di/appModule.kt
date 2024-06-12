@@ -9,6 +9,7 @@ import com.y.app.features.home.ui.HomeViewModel
 import com.y.app.features.login.data.UserRepository
 import com.y.app.features.login.ui.state.LoginViewModel
 import com.y.app.features.post.ui.PostDetailsViewModel
+import com.y.app.features.post.utils.CommentWebSocketManager
 import com.y.app.features.profile.ui.ProfileViewModel
 import com.y.app.features.registration.ui.RegistrationViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -25,6 +26,8 @@ val appModule = module {
 
     factory { PostRepository(get(), get()) }
 
+    factory { CommentWebSocketManager("ws://${RetrofitClient.BASE_URL_HOST}/ws") }
+
     viewModel { LoginViewModel(get()) }
 
     viewModel { RegistrationViewModel(get()) }
@@ -35,5 +38,5 @@ val appModule = module {
 
     viewModel { ProfileViewModel(get(), get(), get()) }
 
-    viewModel { PostDetailsViewModel(get(), get()) }
+    viewModel { PostDetailsViewModel(get(), get(), get()) }
 }

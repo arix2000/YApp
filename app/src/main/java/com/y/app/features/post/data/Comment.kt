@@ -1,7 +1,8 @@
-package com.y.app.features.home.data.models
+package com.y.app.features.post.data
 
 import android.content.Context
 import com.y.app.R
+import com.y.app.features.home.data.models.Post
 import com.y.app.features.login.data.models.User
 import java.time.Duration
 import java.time.LocalDateTime
@@ -16,8 +17,11 @@ data class Comment(
     val author: User,
     val likesCount: Int,
     val isLikedByMe: Boolean,
-    val date: String
+    val date: String,
+    val isNew: Boolean = false
 ) {
+    val dateTime: LocalDateTime get() = LocalDateTime.parse(date)
+
     fun getDateTimeDisplayText(context: Context): String {
         val dateTime = LocalDateTime.parse(date)
         val currentDateTime = LocalDateTime.now()

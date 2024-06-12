@@ -17,43 +17,46 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.y.app.comments
 import com.y.app.core.theme.YTheme
-import com.y.app.features.home.data.models.Comment
 import com.y.app.features.home.ui.components.AvatarHeader
 import com.y.app.features.home.ui.components.LikeIndicator
+import com.y.app.features.post.data.Comment
 
 @Composable
 fun CommentItem(
     comment: Comment, onLikeClicked: () -> Unit, onProfileClicked: (userId: Int) -> Unit
 ) {
     val context = LocalContext.current
-    Column(
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
-            .background(
-                MaterialTheme.colorScheme.onSecondary,
-                MaterialTheme.shapes.extraLarge
-            )
-            .padding(16.dp)
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            AvatarHeader(user = comment.author) {
-                onProfileClicked(comment.author.id)
+    Column(modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp)) {
+        if (comment.isNew)
+            NewCommentBadge(modifier = Modifier.padding(start = 50.dp))
+        Column(
+            modifier = Modifier
+                .background(
+                    MaterialTheme.colorScheme.onSecondary,
+                    MaterialTheme.shapes.extraLarge
+                )
+                .padding(16.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                AvatarHeader(user = comment.author) {
+                    onProfileClicked(comment.author.id)
+                }
+                Spacer(modifier = Modifier.weight(1.0f))
+                Text(
+                    text = comment.getDateTimeDisplayText(context),
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+                )
             }
-            Spacer(modifier = Modifier.weight(1.0f))
-            Text(
-                text = comment.getDateTimeDisplayText(context),
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = comment.content)
+            LikeIndicator(
+                isLiked = comment.isLikedByMe,
+                onClicked = { onLikeClicked() },
+                likesCount = comment.likesCount,
+                modifier = Modifier.align(Alignment.End)
             )
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = comment.content)
-        LikeIndicator(
-            isLiked = comment.isLikedByMe,
-            onClicked = { onLikeClicked() },
-            likesCount = comment.likesCount,
-            modifier = Modifier.align(Alignment.End)
-        )
     }
-
 }
 
 @Preview
@@ -61,7 +64,7 @@ fun CommentItem(
 private fun CommentItemPreview() {
     YTheme {
         Surface {
-            CommentItem(comments.first(), onLikeClicked = {}, onProfileClicked = {})
+            CommentItem(comments.first().copy(isNew = true), onLikeClicked = {}, onProfileClicked = {})
         }
     }
 }

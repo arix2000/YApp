@@ -2,6 +2,7 @@ package com.y.app.features.home.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.y.app.features.common.extensions.sortByDate
 import com.y.app.features.home.data.PostRepository
 import com.y.app.features.home.data.models.PostFilterEnum
 import com.y.app.features.home.data.models.bodies.PostLikeBody
@@ -42,7 +43,7 @@ class HomeViewModel(private val postRepository: PostRepository) : ViewModel() {
                 onSuccess = { posts ->
                     _state.update {
                         it.copy(
-                            posts = posts.toMutableList().apply { add(0, posts[3]) },
+                            posts = posts.sortByDate(),
                             isRefreshing = false
                         )
                     }
@@ -65,7 +66,7 @@ class HomeViewModel(private val postRepository: PostRepository) : ViewModel() {
 
             postRepository.getPosts(filter).collect(
                 onSuccess = { posts ->
-                    _state.update { it.copy(posts = posts, isLoading = false) }
+                    _state.update { it.copy(posts = posts.sortByDate(), isLoading = false) }
                 },
                 onError = { message ->
                     _state.update {

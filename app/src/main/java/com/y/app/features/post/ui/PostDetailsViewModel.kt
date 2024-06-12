@@ -4,21 +4,31 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.y.app.core.local.DataStoreManager
+import com.y.app.features.common.extensions.sortByDate
 import com.y.app.features.home.data.PostRepository
 import com.y.app.features.home.data.models.bodies.PostLikeBody
 import com.y.app.features.post.data.CommentBody
 import com.y.app.features.post.data.CommentLikeBody
+import com.y.app.features.post.utils.CommentWebSocketManager
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.hildan.krossbow.websocket.WebSocketException
+import java.net.SocketException
 
 class PostDetailsViewModel(
-    private val postRepository: PostRepository, private val dataStore: DataStoreManager
+    private val postRepository: PostRepository,
+    private val dataStore: DataStoreManager,
+    private val commentWebSocketManager: CommentWebSocketManager
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<PostDetailsState> = MutableStateFlow(PostDetailsState())
     val state get() = _state.asStateFlow()
+
+    private var webSocketListenerJob: Job? = null
 
     init {
         getUser()
@@ -83,13 +93,35 @@ class PostDetailsViewModel(
                     postRepository.getComments(postId, user.id).collect(
                         onSuccess = { comments ->
                             _state.update {
-                                it.copy(isLoading = false, comments = comments.toMutableStateList())
+                                it.copy(isLoading = false, comments = comments.sortByDate().toMutableStateList())
                             }
+                            listenOnCommentsChange(postId)
                         },
                         onError = ::onError,
                     )
                 }
             }
+        }
+    }
+
+    private fun listenOnCommentsChange(postId: Int) {
+        webSocketListenerJob?.cancel()
+        webSocketListenerJob = viewModelScope.launch {
+            commentWebSocketManager.start(postId, onCommentReceived = { comment ->
+                _state.update {
+                    it.copy(comments = _state.value.comments?.apply {
+                         add(0, comment.copy(isNew = true))
+                    })
+                }
+            }, onFailure = { e ->
+                if (e is WebSocketException || e is SocketException) {
+                    delay(2000)
+                    listenOnCommentsChange(postId)
+                } else {
+                    onError(e.message)
+                }
+                e.printStackTrace()
+            })
         }
     }
 
@@ -105,10 +137,14 @@ class PostDetailsViewModel(
         }
     }
 
-    private fun onError(message: String) {
+    private fun onError(message: String?) {
         _state.update {
             it.copy(errorMessage = message, isLoading = false, isAddCommentLoading = false)
         }
+    }
+
+    override fun onCleared() {
+
     }
 
 }
