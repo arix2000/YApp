@@ -10,6 +10,7 @@ import com.y.app.features.home.data.models.bodies.PostLikeBody
 import com.y.app.features.post.data.CommentBody
 import com.y.app.features.post.data.CommentLikeBody
 import com.y.app.features.post.utils.CommentWebSocketManager
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -93,7 +94,10 @@ class PostDetailsViewModel(
                     postRepository.getComments(postId, user.id).collect(
                         onSuccess = { comments ->
                             _state.update {
-                                it.copy(isLoading = false, comments = comments.sortByDate().toMutableStateList())
+                                it.copy(
+                                    isLoading = false,
+                                    comments = comments.sortByDate().toMutableStateList()
+                                )
                             }
                             listenOnCommentsChange(postId)
                         },
@@ -110,15 +114,18 @@ class PostDetailsViewModel(
             commentWebSocketManager.start(postId, onCommentReceived = { comment ->
                 _state.update {
                     it.copy(comments = _state.value.comments?.apply {
-                         add(0, comment.copy(isNew = true))
+                        add(0, comment.copy(isNew = true))
                     })
                 }
             }, onFailure = { e ->
-                if (e is WebSocketException || e is SocketException) {
-                    delay(2000)
-                    listenOnCommentsChange(postId)
-                } else {
-                    onError(e.message)
+                when(e) {
+                    is WebSocketException,
+                    is SocketException -> {
+                        delay(2000)
+                        listenOnCommentsChange(postId)
+                    }
+                    is CancellationException -> { /** Do nothing **/ }
+                    else -> onError(e.message)
                 }
                 e.printStackTrace()
             })
@@ -144,7 +151,8 @@ class PostDetailsViewModel(
     }
 
     override fun onCleared() {
-
+        webSocketListenerJob?.cancel()
+        super.onCleared()
     }
 
 }
