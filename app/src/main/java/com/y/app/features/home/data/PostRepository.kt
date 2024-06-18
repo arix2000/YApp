@@ -4,12 +4,12 @@ import com.y.app.core.local.DataStoreManager
 import com.y.app.core.network.ApiResponse
 import com.y.app.core.network.ApiService
 import com.y.app.core.network.BaseRepository
-import com.y.app.features.post.data.Comment
 import com.y.app.features.home.data.models.Post
 import com.y.app.features.home.data.models.PostFilterEnum
 import com.y.app.features.home.data.models.bodies.PostBody
 import com.y.app.features.home.data.models.bodies.PostLikeBody
 import com.y.app.features.login.data.models.User
+import com.y.app.features.post.data.Comment
 import com.y.app.features.post.data.CommentBody
 import com.y.app.features.post.data.CommentLikeBody
 import kotlinx.coroutines.flow.Flow
@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.Flow
 class PostRepository(private val apiService: ApiService, private val dataStore: DataStoreManager) :
     BaseRepository() {
 
-    suspend fun getPosts(filterEnum: PostFilterEnum): ApiResponse<List<Post>> {
-        return makeHttpRequest { apiService.getPosts(filterEnum.key) }
+    suspend fun getPosts(filterEnum: PostFilterEnum, userId: Int): ApiResponse<List<Post>> {
+        return makeHttpRequest { apiService.getPosts(filterEnum.key, userId) }
     }
 
     fun getUser(): Flow<User?> {

@@ -74,7 +74,7 @@ fun HomeScreenContent(
     val user = state.user!!
     val inputPosts = state.posts!!
     val pullRefreshState = rememberPullRefreshState(refreshing = state.isRefreshing, onRefresh = {
-        invokeEvent(HomeEvent.RefreshPosts(PostFilterEnum.NEW))
+        invokeEvent(HomeEvent.RefreshPosts(PostFilterEnum.NEW, user.id))
     })
     val posts = remember { mutableStateListOf(*inputPosts.toTypedArray()) }
     LaunchedEffect(inputPosts) {
@@ -84,7 +84,7 @@ fun HomeScreenContent(
 
     LaunchedEffect(Unit) {
         navigator.listenOnBackStack(Screen.HomeScreen) {
-            invokeEvent(HomeEvent.RefreshPosts(PostFilterEnum.NEW, visible = false))
+            invokeEvent(HomeEvent.RefreshPosts(PostFilterEnum.NEW, user.id, visible = false))
         }
     }
 

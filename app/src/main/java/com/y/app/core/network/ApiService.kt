@@ -1,12 +1,12 @@
 package com.y.app.core.network
 
-import com.y.app.features.post.data.Comment
 import com.y.app.features.home.data.models.Post
 import com.y.app.features.home.data.models.bodies.PostBody
 import com.y.app.features.home.data.models.bodies.PostLikeBody
 import com.y.app.features.login.data.models.Credentials
 import com.y.app.features.login.data.models.RegistrationResponse
 import com.y.app.features.login.data.models.User
+import com.y.app.features.post.data.Comment
 import com.y.app.features.post.data.CommentBody
 import com.y.app.features.post.data.CommentLikeBody
 import com.y.app.features.registration.data.UserBody
@@ -28,7 +28,7 @@ interface ApiService {
     suspend fun getUser(@Path("userId") userId: Int): User
 
     @GET("posts")
-    suspend fun getPosts(@Query("filter") filter: String): List<Post>
+    suspend fun getPosts(@Query("filter") filter: String, @Query("loggedUserId") userId: Int): List<Post>
 
     @GET("posts/{userId}")
     suspend fun getUserPosts(
@@ -40,7 +40,7 @@ interface ApiService {
     suspend fun addPost(@Body post: PostBody)
 
     @GET("comments/{postId}")
-    suspend fun getComments(@Path("postId") postId: Int, @Query("userId") userId: Int): List<Comment>
+    suspend fun getComments(@Path("postId") postId: Int, @Query("loggedUserId") userId: Int): List<Comment>
 
     @POST("comments/{postId}")
     suspend fun addComment(@Path("postId") postId: Int, @Body comment: CommentBody)

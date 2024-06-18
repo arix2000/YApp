@@ -23,36 +23,33 @@ class HomeViewModel(private val postRepository: PostRepository) : ViewModel() {
         when (event) {
             is HomeEvent.GetPosts -> getPostsAndUser(event.filter)
             is HomeEvent.LikePost -> likePost(event)
-            is HomeEvent.RefreshPosts -> refreshPosts(event.filter, event.visible)
+            is HomeEvent.RefreshPosts -> refreshPosts(event)
         }
     }
 
     private fun likePost(event: HomeEvent.LikePost) {
         viewModelScope.launch {
-            postRepository.likePost(PostLikeBody(event.userId, event.postId)).collect(
-                onSuccess = { /** do nothing **/ },
-                onError = { message -> _state.update { it.copy(errorMessage = message) } }
-            )
+            postRepository.likePost(PostLikeBody(event.userId, event.postId))
+                .collect(onSuccess = { /** do nothing **/ },
+                    onError = { message -> _state.update { it.copy(errorMessage = message) } })
         }
     }
 
-    private fun refreshPosts(filter: PostFilterEnum, visible: Boolean) {
+    private fun refreshPosts(event: HomeEvent.RefreshPosts) {
         viewModelScope.launch {
-            _state.update { it.copy(isRefreshing = visible) }
-            postRepository.getPosts(filter).collect(
+            _state.update { it.copy(isRefreshing = event.visible) }
+            postRepository.getPosts(event.filter, event.userId).collect(
                 onSuccess = { posts ->
                     _state.update {
                         it.copy(
-                            posts = posts.sortByDate(),
-                            isRefreshing = false
+                            posts = posts.sortByDate(), isRefreshing = false
                         )
                     }
                 },
                 onError = { message ->
                     _state.update {
                         it.copy(
-                            errorMessage = message,
-                            isRefreshing = false
+                            errorMessage = message, isRefreshing = false
                         )
                     }
                 },
@@ -63,26 +60,20 @@ class HomeViewModel(private val postRepository: PostRepository) : ViewModel() {
     private fun getPostsAndUser(filter: PostFilterEnum) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-
-            postRepository.getPosts(filter).collect(
-                onSuccess = { posts ->
-                    _state.update { it.copy(posts = posts.sortByDate(), isLoading = false) }
-                },
-                onError = { message ->
-                    _state.update {
-                        it.copy(
-                            errorMessage = message,
-                            isLoading = false
-                        )
-                    }
-                },
-            )
-
-            if (_state.value.user == null) {
-                postRepository.getUser().collect { user ->
-                    if (user != null)
-                        _state.update { it.copy(user = user) }
-                }
+            postRepository.getUser().collect { user ->
+                if (user != null) _state.update { it.copy(user = user) }
+                postRepository.getPosts(filter, user?.id ?: -1).collect(
+                    onSuccess = { posts ->
+                        _state.update { it.copy(posts = posts.sortByDate(), isLoading = false) }
+                    },
+                    onError = { message ->
+                        _state.update {
+                            it.copy(
+                                errorMessage = message, isLoading = false
+                            )
+                        }
+                    },
+                )
             }
         }
     }
