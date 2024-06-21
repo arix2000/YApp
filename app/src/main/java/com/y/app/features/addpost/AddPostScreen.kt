@@ -103,11 +103,14 @@ private fun AddPostScreenContent(
                 hint = stringResource(R.string.sup),
                 modifier = Modifier.heightIn(min = 200.dp, max = 400.dp),
                 onValueChanged = {
-                    contentNotEmptyText =
-                        if (it.isBlank()) context.getString(R.string.content_cannot_be_empty) else null
-                    isCharLimitExceeded = it.length >= MAX_CHAR_COUNT
-                    contentTextCharCount = it.length
-                    if (!isCharLimitExceeded) contentText = it
+                    if (it != contentText) {
+                        contentNotEmptyText =
+                            if (it.isBlank()) context.getString(R.string.content_cannot_be_empty) else null
+                        if (!isCharLimitExceeded) contentText = it
+                        isCharLimitExceeded = (it.length) >= MAX_CHAR_COUNT
+                        contentTextCharCount = it.length
+
+                    }
                 },
             )
             Spacer(modifier = Modifier.height(8.dp))

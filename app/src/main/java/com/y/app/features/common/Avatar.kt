@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -20,7 +22,13 @@ import com.y.app.core.theme.YTheme
 import com.y.app.features.registration.data.ProfileColorEnum
 
 @Composable
-fun Avatar(firstName: String, avatarColor: ProfileColorEnum, avatarSize: Dp, fontSize: TextUnit, modifier: Modifier = Modifier) {
+fun Avatar(
+    firstName: String,
+    avatarColor: ProfileColorEnum,
+    avatarSize: Dp,
+    fontSize: TextUnit,
+    modifier: Modifier = Modifier
+) {
     Box(
         contentAlignment = Alignment.Center, modifier = modifier
             .border(
@@ -35,6 +43,7 @@ fun Avatar(firstName: String, avatarColor: ProfileColorEnum, avatarSize: Dp, fon
             text = firstName.firstOrNull()?.toString()?.uppercase() ?: "X",
             backgroundColor = avatarColor.color,
             fontSize = fontSize,
+            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false))
         )
     }
 }

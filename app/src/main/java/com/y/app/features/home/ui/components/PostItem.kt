@@ -63,7 +63,7 @@ fun PostItem(
         .background(
             backgroundColor, shape = shape
         )
-        .padding(16.dp)) {
+        .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)) {
         val textLayoutResult: TextLayoutResult = textMeasurer.measure(
             post.content,
             constraints = Constraints(
@@ -92,9 +92,10 @@ fun PostItem(
                     )
                 )
             }
-            if (!post.imageUrl.isNullOrBlank()) ImageSection(
-                post.imageUrl,
-                onClick = { isDialogShowed.value = true })
+            if (!post.imageUrl.isNullOrBlank())
+                ImageSection(post.imageUrl,
+                    onClick = { isDialogShowed.value = true })
+            Spacer(modifier = Modifier.height(5.dp))
             CommentAndLikeSection(post, onLikeClicked = onLikeClicked)
         }
     }

@@ -12,13 +12,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun IndicatorRow(modifier: Modifier = Modifier, onClick: (() -> Unit)? = null, content: @Composable ()-> Unit) {
-    Row(horizontalArrangement = Arrangement.spacedBy(4.dp),
+fun IndicatorRow(
+    modifier: Modifier = Modifier, onClick: (() -> Unit)? = null, content: @Composable () -> Unit
+) {
+    val thisModifier = if (onClick != null) modifier.clickable { onClick() }
+    else modifier
+
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        modifier = Modifier
             .clip(MaterialTheme.shapes.medium)
-            .clickable { if (onClick != null) onClick() }
-            .padding(8.dp)) {
+            .then(thisModifier)
+            .padding(8.dp)
+    ) {
         content()
     }
 }

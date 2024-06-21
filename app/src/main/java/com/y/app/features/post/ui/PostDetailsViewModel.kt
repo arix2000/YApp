@@ -69,16 +69,11 @@ class PostDetailsViewModel(
                     event.postId, CommentBody(event.content, user.id)
                 ).collect(
                     onSuccess = {
-                        postRepository.getComments(event.postId, user.id).collect(
-                            onSuccess = { comments ->
-                                _state.update {
-                                    it.copy(
-                                        isAddCommentLoading = false,
-                                        comments = comments.toMutableStateList()
-                                    )
-                                }
-                            }, onError = ::onError
-                        )
+                        _state.update {
+                            it.copy(
+                                isAddCommentLoading = false,
+                            )
+                        }
                     },
                     onError = ::onError,
                 )
@@ -99,7 +94,7 @@ class PostDetailsViewModel(
                                     comments = comments.sortByDate().toMutableStateList()
                                 )
                             }
-                            listenOnCommentsChange(postId)
+                            listenOnCommentsChange(postId, user.id)
                         },
                         onError = ::onError,
                     )
@@ -108,23 +103,27 @@ class PostDetailsViewModel(
         }
     }
 
-    private fun listenOnCommentsChange(postId: Int) {
+    private fun listenOnCommentsChange(postId: Int, userId: Int) {
         webSocketListenerJob?.cancel()
         webSocketListenerJob = viewModelScope.launch {
             commentWebSocketManager.start(postId, onCommentReceived = { comment ->
                 _state.update {
                     it.copy(comments = _state.value.comments?.apply {
-                        add(0, comment.copy(isNew = true))
+                        add(0, comment.copy(isNew = comment.author.id != userId))
                     })
                 }
             }, onFailure = { e ->
-                when(e) {
+                when (e) {
                     is WebSocketException,
                     is SocketException -> {
                         delay(2000)
-                        listenOnCommentsChange(postId)
+                        listenOnCommentsChange(postId, userId)
                     }
-                    is CancellationException -> { /** Do nothing **/ }
+
+                    is CancellationException -> {
+                        /** Do nothing **/
+                    }
+
                     else -> onError(e.message)
                 }
                 e.printStackTrace()

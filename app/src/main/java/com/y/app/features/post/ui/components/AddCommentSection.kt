@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -39,7 +41,7 @@ import com.y.app.features.common.extensions.toProfileColor
 import com.y.app.features.login.data.models.User
 
 @Composable
-fun AddCommentSection(user: User, onAddClicked: (String) -> Unit) {
+fun AddCommentSection(user: User, isAddLoading: Boolean, onAddClicked: (String) -> Unit) {
     var commentContent by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
 
@@ -72,16 +74,19 @@ fun AddCommentSection(user: User, onAddClicked: (String) -> Unit) {
                     focusManager.clearFocus()
                 }
                 .background(
-                    if (commentContent.isNotBlank()) MaterialTheme.colorScheme.primary else Color.DarkGray,
+                    if (commentContent.isNotBlank() || isAddLoading) MaterialTheme.colorScheme.primary else Color.DarkGray,
                     CircleShape
                 )
                 .padding(12.dp)
-                ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Default.ArrowForward,
-                    contentDescription = "Add comment",
-                    tint = if (commentContent.isNotBlank()) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground
-                )
+            ) {
+                if (isAddLoading)
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp), color = MaterialTheme.colorScheme.onPrimary)
+                else
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.ArrowForward,
+                        contentDescription = "Add comment",
+                        tint = if (commentContent.isNotBlank()) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground
+                    )
             }
         }
     }
@@ -92,7 +97,7 @@ fun AddCommentSection(user: User, onAddClicked: (String) -> Unit) {
 private fun AddCommentSectionPreview() {
     YTheme {
         Surface {
-            AddCommentSection(author3, { })
+            AddCommentSection(author3, true, { })
         }
     }
 }

@@ -127,7 +127,7 @@ private fun PostDetailsScreenContent(
                 item { Spacer(modifier = Modifier.height(100.dp)) }
             }
         }
-        AddCommentSection(state.user!!, onAddClicked = {
+        AddCommentSection(state.user!!, state.isAddCommentLoading, onAddClicked = {
             invokeEvent(PostDetailsEvent.AddComment(post.id, it))
         })
     }

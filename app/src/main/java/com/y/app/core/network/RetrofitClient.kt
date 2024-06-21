@@ -7,8 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object RetrofitClient {
-    const val BASE_URL_HOST = "192.168.1.21:8080"
-    private const val BASE_URL = "http://${BASE_URL_HOST}/api/"
+    const val BASE_URL_HOST = "yapp-backend.azurewebsites.net"
+    private const val BASE_URL = "https://${BASE_URL_HOST}/api/"
 
     fun create(): ApiService {
         return Retrofit.Builder()
