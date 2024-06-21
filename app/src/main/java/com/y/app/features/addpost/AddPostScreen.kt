@@ -88,13 +88,14 @@ private fun AddPostScreenContent(
 
     val context = LocalContext.current
 
-    Column(Modifier.imePadding()) {
+    Column {
         DefaultTopBar(title = "Add post", navigator = navigator)
         Spacer(modifier = Modifier.height(16.dp))
         Column(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .verticalScroll(rememberScrollState())
+                .imePadding()
         ) {
             AddPostTextField(
                 value = contentText,
